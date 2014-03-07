@@ -16,6 +16,7 @@
   height: 20px;
 }
 .slider.slider-horizontal .slider-track {
+	background:#EFEFEF;
   height: 10px;
   width: 100%;
   margin-top: -5px;
@@ -23,6 +24,7 @@
   left: 0;
 }
 .slider.slider-horizontal .slider-selection {
+	background:#CFCFCF;
   height: 100%;
   top: 0;
   bottom: 0;
