@@ -1,57 +1,64 @@
 <!DOCTYPE html>
 <!-- saved from url=(0053)http://leafletjs.com/examples/choropleth-example.html -->
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 <title>HKI PECS</title>
 <meta charset="utf-8">
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<link rel="stylesheet" href="css/leaflet.css"/>
+<link rel="stylesheet" href="css/bootstrap.min.css"/>
+<link rel="stylesheet" href="css/slider.css"/>
+<style>
+#map {
+	width: 100%;
+	height: 600px;
+}
 
-    <link rel="stylesheet" href="css/leaflet.css">
-
-    <style>
-        #map {
-            width: 100%;
-            height: 600px;
-        }
-
-        h3 {
-            font: 30px "Helvetica Neue";
-            font-weight: 300;
-            color: #999;
-        }
-        .info {
-            padding: 6px 8px;
-            font: 14px/16px Arial, Helvetica, sans-serif;
-            background: white;
-            background: rgba(255,255,255,0.8);
-            box-shadow: 0 0 15px rgba(0,0,0,0.2);
-            border-radius: 5px;
-        }
-        .info h4 {
-            margin: 0 0 5px;
-            color: #777;
-        }
-
-        .legend {
-            text-align: left;
-            line-height: 18px;
-            color: #555;
-        }
-
-        .legend i {
-            width: 18px;
-            height: 18px;
-            float: left;
-            margin-right: 8px;
-            opacity: 0.7;
-        }
-    </style>
+h3 {
+	font: 30px "Helvetica Neue";
+	font-weight: 300;
+	color: #999;
+}
+.info {
+	padding: 6px 8px;
+	font: 14px/16px Arial, Helvetica, sans-serif;
+	background: white;
+	background: rgba(255,255,255,0.8);
+	box-shadow: 0 0 15px rgba(0,0,0,0.2);
+	border-radius: 5px;
+}
+.info h4 {
+	margin: 0 0 5px;
+	color: #777;
+}
+.legend {
+	text-align: left;
+	line-height: 18px;
+	color: #555;
+}
+.legend i {
+	width: 18px;
+	height: 18px;
+	float: left;
+	margin-right: 8px;
+	opacity: 0.7;
+}
+.box{
+	padding:1em;
+}
+</style>
 </head>
 <body>
-
 <h3>HKI Vitamin A Coverage</h3>
 
-<div id="map" class="leaflet-container leaflet-fade-anim" tabindex="0" style="position: relative;">
+<div class="box">
+	<p>Drag the slider to view the various rounds done</p>
+	<input id="slider" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="20" data-slider-step="1" data-slider-value="14"/><br/><br/>
+</div>
+
+<div id="map" class="leaflet-container leaflet-fade-anim" tabindex="0" style="position: relative;"></div>
     <script src="js/d3.min.js"></script>
     <script src="js/underscore-min.js"></script>
     <script src="js/queue.v1.min.js"></script>
@@ -59,4 +66,14 @@
     <script src="lib/wax.leaf.min.js"></script>
     <script src="js/leaflet.js"></script>
     <script src="js/chloro.js"></script>
-</body></html>
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap-slider.js"></script>
+	
+<script>
+$("#slider").slider({
+	tooltip: 'always'
+});
+
+</script>
+</body>
+</html>
