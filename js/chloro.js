@@ -9,8 +9,9 @@ var setupOptions = {
 
 MYAPP.indicator = null;
 MYAPP.datajson = null;
+MYAPP.countryjson = null;
 
-var years = [2010,2011,2012,2013];
+var years = [2011,2012,2013];
 var rounds = [1,2];
 
 var gen_key = function() {
@@ -25,7 +26,7 @@ function setYear(year,round) {
     MYAPP.indicator.round = round;
     var options = MYAPP.indicator;
     options.year = year;
-    loadJSON(options);
+    loadAfricaJSON(options);
 };
 
 var mapboxTiles = L.tileLayer('https://{s}.tiles.mapbox.com/v3/ona.hbgm1c4d/{z}/{x}/{y}.png', {
@@ -155,7 +156,7 @@ function onEachFeature(feature, layer) {
     });
 };
 
-function loadJSON(options) {
+function loadAfricaJSON(options) {
     if (options === undefined || options === null) {
         options = setupOptions;
     }
@@ -192,7 +193,7 @@ function loadJSON(options) {
                     var key = row.year + '-' + row.round;
 
                     var dataCountry = data[i].iso_a2;
-                    var years = [2010,2011,2012,2013,2014];
+                    var years = [2011,2012,2013,2014];
                     var rounds = [1,2];
 
                     for (var j = 0; j < json.features.length; j++) {
@@ -224,9 +225,81 @@ function loadJSON(options) {
 
 };
 
+function loadPECSJSON(options) {
+    if (options === undefined || options === null) {
+        options = setupOptions;
+    }
 
 
-loadJSON();
+    MYAPP.indicator = options;
+
+    try {
+        map.removeControl(info);
+    } catch (e) {}
+    info.addTo(map);
+
+    var callback = function (first) {
+        if (map.hasLayer(geojson)) {
+            map.removeLayer(geojson);
+        }
+        geojson = L.geoJson(MYAPP.datajson, {
+            style: style,
+            onEachFeature: onEachFeature
+        });
+        map.addLayer(geojson);
+
+    };
+
+    if (MYAPP.countryjson === null) {
+        d3.csv("data/hki-vas-data.csv", function (data) {
+            var allyears;
+            d3.json("data/hki-pecs.geojson", function (json) {
+                var all_data = {};
+                for (var i = 0; i < data.length; i++) {
+                    var row = data[i];
+                    var key = row.year + '-' + row.round;
+
+                    var admin_field = data[i].admin_field;
+                    
+
+                    var dataRegion = data[i].admin_code;
+                                        var years = [2011,2012,2013,2014];
+                    var rounds = [1,2];
+
+                    for (var j = 0; j < json.features.length; j++) {
+                        var jsonRegion = json.features[j].properties[admin_field];
+
+                        if (dataRegion == jsonRegion) {
+                            console.log(dataRegion);
+                            //Copy the data value into the JSON
+                            json.features[j].properties[key + '_pecs'] = parseFloat(data[i].pecs);
+                            json.features[j].properties[key + '_admin_coverage'] = parseFloat(data[i].admin_coverage);
+                            json.features[j].properties[key + '_pecs_admin_delta'] = parseFloat(data[i].pecs_admin_delta);
+                            json.features[j].properties[key + '_level'] = data[i].level;
+                            //Stop looking through the JSON
+                            break;
+                        }
+                    }
+                }
+
+                MYAPP.datajson = json;
+
+                if (callback !== null) {
+                    callback(true);
+                }
+            });
+        });
+    } else {
+        if (callback !== null) {
+            callback(false);
+        }
+    }
+
+};
+
+loadPECSJSON();
+//loadAfricaJSON();
+
 
 
 // Build Legend
