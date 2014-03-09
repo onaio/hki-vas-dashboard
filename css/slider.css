@@ -30,7 +30,7 @@
   bottom: 0;
 }
 .slider.slider-horizontal .slider-handle {
-  margin-left: -10px;
+  margin-left: -8px;
   margin-top: -5px;
 }
 .slider.slider-horizontal .slider-handle.triangle {
@@ -121,7 +121,7 @@
 }
 .slider-handle {
   position: absolute;
-  width: 20px;
+  width: 15px;
   height: 20px;
   background-image: -webkit-gradient(linear, left 0%, left 100%, from(#149bdf), to(#0480be));
   background-image: -webkit-linear-gradient(top, #149bdf, 0%, #0480be, 100%);
@@ -135,7 +135,7 @@
   border: 0px solid transparent;
 }
 .slider-handle.round {
-  border-radius: 50%;
+  border-radius: 15%;
 }
 .slider-handle.triangle {
   background: transparent none;
