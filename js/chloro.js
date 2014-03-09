@@ -3,8 +3,8 @@ var MYAPP = {};
 var setupOptions = {
     year: '2012',
     round: 2,
-    code: 'pecs',
-    name: 'PECs Coverage'
+    code: 'vas_6_59',
+    name: 'VAS (6-59m)'
 };
 
 MYAPP.indicator = null;
@@ -13,6 +13,9 @@ MYAPP.countryjson = null;
 
 var years = [2011,2012,2013];
 var rounds = [1,2];
+
+var indicators = {};
+
 
 var gen_key = function() {
     var k;
@@ -29,7 +32,21 @@ function setYear(year,round) {
     loadAfricaJSON(options);
 };
 
-var mapboxTiles = L.tileLayer('https://{s}.tiles.mapbox.com/v3/ona.hbgm1c4d/{z}/{x}/{y}.png', {
+function createJSONFile(json) {
+    var geojsonfile = JSON.stringify(json);
+  
+    var blob = new Blob([geojsonfile], {type: "application/json"});
+    var url  = URL.createObjectURL(blob);
+
+    var a = document.createElement('a');
+    a.download    = "backup.json";
+    a.href        = url;
+    a.textContent = "Download backup.json";
+    document.getElementById('content').appendChild(a);
+
+};
+
+var mapboxTiles = L.tileLayer('https://{s}.tiles.mapbox.com/v3/ona.swgn9udi/{z}/{x}/{y}.png', {
     attribution: '<a href="http://www.mapbox.com/about/maps/" target="_blank">Terms &amp; Feedback</a>',
 });
 
@@ -67,7 +84,7 @@ info.update = function (props) {
         + '<h4>' + MYAPP.indicator.year + ' (Round ' + MYAPP.indicator.round + ')</h4>'
         + (props ?
         '<b>' + props.name + ' ' + level_note + '</b><br />' + val
-        : 'Hover over a country');
+        : 'Hover over an area');
 };
 
 
@@ -83,7 +100,6 @@ function getColor(d) {
 // style country
 
 function style(feature) {
-    //var key = MYAPP.indicator.year + '-' + MYAPP.indicator.round;
     var key = gen_key();
     var bcolor;
     if (feature.properties[key + 'level'] == 'national') {
@@ -92,12 +108,10 @@ function style(feature) {
         bcolor = '#999';
     }
 
-//    console.log(feature.properties[key + 'level']);
-
     if (feature.properties[key + '_' + MYAPP.indicator.code] > 0) {
 
     return {
-        weight: 2,
+        weight: 1,
         opacity: 1,
         color: '#fff',
         dashArray: '',
@@ -109,7 +123,7 @@ function style(feature) {
         return {
             weight: 0,
             opacity: 1,
-            color: bcolor,
+            color: '#fff',
             dashArray: '',
             fillOpacity: 0.0,
             fillColor: getColor(feature.properties[key + '_' +MYAPP.indicator.code])
@@ -250,7 +264,8 @@ function loadPECSJSON(options) {
 
     };
 
-    if (MYAPP.countryjson === null) {
+    if (MYAPP.datajson === null) {
+
         d3.csv("data/hki-vas-data.csv", function (data) {
             var allyears;
             d3.json("data/hki-pecs.geojson", function (json) {
@@ -261,28 +276,36 @@ function loadPECSJSON(options) {
 
                     var admin_field = data[i].admin_field;
                     
-
                     var dataRegion = data[i].admin_code;
-                                        var years = [2011,2012,2013,2014];
+                    var years = [2011,2012,2013,2014];
                     var rounds = [1,2];
 
                     for (var j = 0; j < json.features.length; j++) {
                         var jsonRegion = json.features[j].properties[admin_field];
-
+                        
                         if (dataRegion == jsonRegion) {
-                            console.log(dataRegion);
+                            
                             //Copy the data value into the JSON
                             json.features[j].properties[key + '_pecs'] = parseFloat(data[i].pecs);
-                            json.features[j].properties[key + '_admin_coverage'] = parseFloat(data[i].admin_coverage);
+                            json.features[j].properties[key + '_vas_6_11'] = parseFloat(data[i].vas_6_11);
+                            json.features[j].properties[key + '_vas_12_59'] = parseFloat(data[i].vas_12_59);
+                            json.features[j].properties[key + '_vas_6_59'] = parseFloat(data[i].vas_6_59);
+                            json.features[j].properties[key + '_vas_6_59_f'] = parseFloat(data[i].vas_6_59_f);
+                            json.features[j].properties[key + '_vas_6_59_m'] = parseFloat(data[i].vas_6_59_m);
+                            json.features[j].properties[key + '_admin_pecs_6_59'] = parseFloat(data[i].admin_pecs_6_59);
                             json.features[j].properties[key + '_pecs_admin_delta'] = parseFloat(data[i].pecs_admin_delta);
+                            json.features[j].properties[key + '_admin_nat_6_59'] = parseFloat(data[i].admin_nat_6_59);
                             json.features[j].properties[key + '_level'] = data[i].level;
                             //Stop looking through the JSON
                             break;
                         }
                     }
                 }
-
+               
                 MYAPP.datajson = json;
+                
+                // create JSON File
+                //createJSONFile(MYAPP.datajson);
 
                 if (callback !== null) {
                     callback(true);
@@ -299,8 +322,6 @@ function loadPECSJSON(options) {
 
 loadPECSJSON();
 //loadAfricaJSON();
-
-
 
 // Build Legend
 
@@ -327,6 +348,8 @@ function buildPicker() {
 
     var picker = L.control({position: 'topleft'});
 
+
+
     picker.onAdd = function (map) {
         var div = L.DomUtil.create('div', 'info legend'),
             labels = [];
@@ -344,8 +367,9 @@ function buildPicker() {
 
 
 buildLegend();
-
 buildPicker();
+
+
 
 // Build Data Picker
 
