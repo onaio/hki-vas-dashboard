@@ -3,8 +3,8 @@ var MYAPP = {};
 var setupOptions = {
     year: '2012',
     round: 2,
-    code: 'pecs',
-    name: 'PECs Coverage'
+    code: 'vas_6_59',
+    name: 'VAS (6-59m)'
 };
 
 MYAPP.indicator = null;
@@ -13,6 +13,9 @@ MYAPP.countryjson = null;
 
 var years = [2011,2012,2013];
 var rounds = [1,2];
+
+var indicators = {};
+
 
 var gen_key = function() {
     var k;
@@ -281,7 +284,7 @@ function loadPECSJSON(options) {
                         var jsonRegion = json.features[j].properties[admin_field];
                         
                         if (dataRegion == jsonRegion) {
-                            console.log(jsonRegion + ' '+ dataRegion + ' *' + data[i].catchment_area);
+                            
                             //Copy the data value into the JSON
                             json.features[j].properties[key + '_pecs'] = parseFloat(data[i].pecs);
                             json.features[j].properties[key + '_vas_6_11'] = parseFloat(data[i].vas_6_11);
@@ -300,7 +303,9 @@ function loadPECSJSON(options) {
                 }
                
                 MYAPP.datajson = json;
-                createJSONFile(MYAPP.datajson);
+                
+                // create JSON File
+                //createJSONFile(MYAPP.datajson);
 
                 if (callback !== null) {
                     callback(true);
