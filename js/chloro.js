@@ -3,7 +3,7 @@ var MYAPP = {};
 var setupOptions = {
     year: '2012',
     round: 2,
-    code: 'pecs',
+    code: 'vas_6_11',
     name: 'PECs Coverage'
 };
 
@@ -29,7 +29,7 @@ function setYear(year,round) {
     loadAfricaJSON(options);
 };
 
-var mapboxTiles = L.tileLayer('https://{s}.tiles.mapbox.com/v3/ona.hbgm1c4d/{z}/{x}/{y}.png', {
+var mapboxTiles = L.tileLayer('https://{s}.tiles.mapbox.com/v3/ona.vwrssjor/{z}/{x}/{y}.png', {
     attribution: '<a href="http://www.mapbox.com/about/maps/" target="_blank">Terms &amp; Feedback</a>',
 });
 
@@ -97,8 +97,8 @@ function style(feature) {
     if (feature.properties[key + '_' + MYAPP.indicator.code] > 0) {
 
     return {
-        weight: 2,
-        opacity: 1,
+        weight: 1,
+        opacity: 0.9,
         color: '#fff',
         dashArray: '',
         fillOpacity: 0.5,
@@ -135,6 +135,23 @@ function highlightFeature(e) {
 
     info.update(layer.feature.properties);
 };
+
+function createJSONFile(json) {
+    var geojsonfile = JSON.stringify(json);
+  console.log("creating json");
+    console.log(geojsonfile);
+    var blob = new Blob([geojsonfile], {type: "application/json"});
+    var url  = URL.createObjectURL(blob);
+
+    var a = document.createElement('a');
+    a.download    = "backup.json";
+    a.href        = url;
+    a.textContent = "Download backup.json";
+    document.getElementById('content').appendChild(a);
+
+};
+
+
 
 
 var geojson;
@@ -250,7 +267,8 @@ function loadPECSJSON(options) {
 
     };
 
-    if (MYAPP.countryjson === null) {
+    if (MYAPP.datajson === null) {
+
         d3.csv("data/hki-vas-data.csv", function (data) {
             var allyears;
             d3.json("data/hki-pecs.geojson", function (json) {
@@ -270,19 +288,27 @@ function loadPECSJSON(options) {
                         var jsonRegion = json.features[j].properties[admin_field];
 
                         if (dataRegion == jsonRegion) {
-                            console.log(dataRegion);
+                            
                             //Copy the data value into the JSON
                             json.features[j].properties[key + '_pecs'] = parseFloat(data[i].pecs);
-                            json.features[j].properties[key + '_admin_coverage'] = parseFloat(data[i].admin_coverage);
+                            json.features[j].properties[key + '_vas_6_11'] = parseFloat(data[i].vas_6_11);
+                            json.features[j].properties[key + '_vas_12_59'] = parseFloat(data[i].vas_12_59);
+                            json.features[j].properties[key + '_vas_6_59'] = parseFloat(data[i].vas_6_59);
+                            json.features[j].properties[key + '_vas_6_59_f'] = parseFloat(data[i].vas_6_59_f);
+                            json.features[j].properties[key + '_vas_6_59_m'] = parseFloat(data[i].vas_6_59_m);
+                            json.features[j].properties[key + '_admin_pecs_6_59'] = parseFloat(data[i].admin_pecs_6_59);
                             json.features[j].properties[key + '_pecs_admin_delta'] = parseFloat(data[i].pecs_admin_delta);
+                            json.features[j].properties[key + '_admin_nat_6_59'] = parseFloat(data[i].admin_nat_6_59);
                             json.features[j].properties[key + '_level'] = data[i].level;
                             //Stop looking through the JSON
                             break;
                         }
                     }
                 }
-
+               
                 MYAPP.datajson = json;
+                //console.log(json);
+                createJSONFile(MYAPP.datajson);
 
                 if (callback !== null) {
                     callback(true);
@@ -299,6 +325,7 @@ function loadPECSJSON(options) {
 
 loadPECSJSON();
 //loadAfricaJSON();
+
 
 
 
@@ -346,6 +373,9 @@ function buildPicker() {
 buildLegend();
 
 buildPicker();
+
+
+
 
 // Build Data Picker
 
