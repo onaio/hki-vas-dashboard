@@ -7,7 +7,7 @@
 <meta charset="utf-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<link rel="stylesheet" href="css/leaflet.css"/>
+<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.css" />
 <link rel="stylesheet" href="css/bootstrap.min.css"/>
 <link rel="stylesheet" href="css/slider.css"/>
 <style>
@@ -54,6 +54,9 @@ h3 {
 	margin-bottom:2.5em;
 }
 </style>
+
+<script src="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.js"></script>
+<script src='//api.tiles.mapbox.com/mapbox.js/plugins/leaflet-omnivore/v0.0.0/leaflet-omnivore.min.js'></script>
 </head>
 <body>
 <h3>HKI Vitamin A Supplement (VAS) Coverage</h3>
@@ -70,11 +73,12 @@ h3 {
     <script src="js/underscore-min.js"></script>
     <script src="js/queue.v1.min.js"></script>
     <script src="js/topojson.min.js"></script>
-    <script src="lib/wax.leaf.min.js"></script>
-    <script src="js/leaflet.js"></script>
     <script src="js/chloro.js"></script>
     <script src="js/jquery.min.js"></script>
     <script src="js/bootstrap-slider.js"></script>
+    <script src="js/leaflet-heat.js"></script>
+    
+
 	
 <script>
 var slider = $("#slider"),

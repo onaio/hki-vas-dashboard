@@ -23,6 +23,17 @@ var gen_key = function() {
     return k;
 };
 
+var colorPalette = ['#8DD3C7', '#FB8072', '#FFFFB3', '#BEBADA', '#80B1D3', '#FDB462', '#B3DE69', '#FCCDE5', '#D9D9D9',
+    '#BC80BD', '#CCEBC5', '#FFED6F'];
+
+var circleStyle = {
+    color: '#fff',
+    border: 8,
+    fillColor: '#ff3300',
+    fillOpacity: 0.9,
+    radius: 8,
+    opacity: 0.5
+};
 
 function setYear(year,round) {
     MYAPP.indicator.year = year;
@@ -46,14 +57,40 @@ function createJSONFile(json) {
 
 };
 
-var mapboxTiles = L.tileLayer('https://{s}.tiles.mapbox.com/v3/ona.swgn9udi/{z}/{x}/{y}.png', {
+var hkiTiles = L.tileLayer('https://{s}.tiles.mapbox.com/v3/ona.swgn9udi/{z}/{x}/{y}.png', {
     attribution: '<a href="http://www.mapbox.com/about/maps/" target="_blank">Terms &amp; Feedback</a>',
 });
 
-var map = L.map('map')
-    .addLayer(mapboxTiles)
-    .setView([0, 17], 4);
+/*
+var map = L.map('map', 
+    {
+        minZoom: '3',
+        maxZoom: '17'
+    }
+    )
+    .addLayer(hkiTiles)
+    .setView([3, 12], 4);
+*/
 
+
+//ona.hg740ono
+
+var map = new L.Map('map', {
+minZoom: 0,
+maxZoom: 18,
+layers: [
+    L.tileLayer('https://{s}.tiles.mapbox.com/v3/ona.swgn9udi/{z}/{x}/{y}.png', {
+    maxZoom: 9,
+    minZoom: 0,
+    attribution: '<a href="http://www.mapbox.com/about/maps/" target="_blank">Terms &amp; Feedback</a>'
+}),
+    L.tileLayer('https://{s}.tiles.mapbox.com/v3/ona.hbgm1c4d/{z}/{x}/{y}.png', {
+    maxZoom: 18,
+    minZoom: 10,
+    attribution: '<a href="http://www.mapbox.com/about/maps/" target="_blank">Terms &amp; Feedback</a>'
+})]
+})
+.setView([3,12],4);
 
 // control that shows state info on hover
 var info = L.control();
@@ -239,6 +276,9 @@ function loadAfricaJSON(options) {
 
 };
 
+
+
+
 function loadPECSJSON(options) {
     if (options === undefined || options === null) {
         options = setupOptions;
@@ -323,6 +363,42 @@ function loadPECSJSON(options) {
 loadPECSJSON();
 //loadAfricaJSON();
 
+
+
+var pointLayer = omnivore.csv('data/pecs/2013-1-CM.LT.csv')
+.addTo(map);
+
+
+//var heat = L.heatLayer(pointLayer, {radius: 25}).addTo(map);
+
+//pointLayer.addTo(map);
+
+//pointToLayer: function(feature, latlng) {
+//            var marker = L.circleMarker(latlng, circleStyle);
+//            latLngArray.push(latlng);
+
+
+
+
+/*
+var geojsonMarkerOptions = {
+    radius: 8,
+    fillColor: "#ff7800",
+    color: "#000",
+    weight: 1,
+    opacity: 1,
+    fillOpacity: 0.8
+};
+
+L.geoJson(someGeojsonFeature, {
+    pointToLayer: function (feature, latlng) {
+        return L.circleMarker(latlng, circleStyle);
+    }
+}).addTo(map);
+*/
+
+
+
 // Build Legend
 
 function buildLegend () {
@@ -347,8 +423,6 @@ function buildLegend () {
 function buildPicker() {
 
     var picker = L.control({position: 'topleft'});
-
-
 
     picker.onAdd = function (map) {
         var div = L.DomUtil.create('div', 'info legend'),
