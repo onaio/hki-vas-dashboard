@@ -1,0 +1,106 @@
+@import url(http://fonts.googleapis.com/css?family=Open+Sans:400,700);
+
+body, *{
+	font-family:'Open Sans'!important;
+}
+
+strong{ font-weight:700; }
+
+.cls{ clear:both; }
+
+.header.navbar{
+	background:#545454;
+	color:#FFFFFF;
+}
+.header-inner .col-sm-5{
+	padding:1em 1em 1em 2em;
+}
+.header-inner .col-sm-2{
+	padding:1em 0;
+}
+.head-title{
+	font-size:1.2em;
+	text-transform:uppercase;
+}
+.logo-holder{
+	border-left:1px solid #808080;
+}
+.navbar-brand img{
+	margin-left:2em;
+}
+
+.page-sidebar{
+	background:#F3F3F3;
+	min-height:43em;
+	min-width:14em;
+	padding-left:2em;
+	padding-top:1.2em;
+	position:absolute;
+}
+.navheader{
+	font-weight:700;
+	margin-top:1em;
+}
+.page-sidebar ul{
+	padding-left:.15em;
+}
+.page-sidebar ul li{
+	color:#2c2c2c;
+	list-style:none;
+	padding-top:.3em;
+}
+.page-sidebar ul li a{
+	color:#2c2c2c;
+}
+.page-sidebar ul li.selected{
+	list-style:url(../img/arrow.png);
+}
+.page-sidebar ul li.selected a{
+	color:#349ecd;
+	font-weight:bold;
+}
+
+#map{
+	background:#CDE3F6;
+	margin-top:7.5em;
+/*	width: 100%;*/
+	height:50em;
+	margin-left:16em;
+}
+
+.info {
+	padding: 6px 8px;
+	font: 14px/16px Arial, Helvetica, sans-serif;
+	background: white;
+	background: rgba(255,255,255,0.8);
+	box-shadow: 0 0 15px rgba(0,0,0,0.2);
+	border-radius: 5px;
+}
+.info h4 {
+	margin: 0 0 5px;
+	color: #777;
+}
+.legend {
+	text-align: left;
+	line-height: 18px;
+	color: #555;
+}
+.legend i {
+	width: 18px;
+	height: 18px;
+	float: left;
+	margin-right: 8px;
+	opacity: 0.7;
+}
+.slidebox{  }
+.slider.slider-horizontal{
+	height:16px;
+	margin-left:2em;
+	width:400px;
+}
+.slider-labels{
+	width:500px;
+}
+.slider-labels span{
+	padding:0 .8em;
+}
