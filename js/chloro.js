@@ -80,7 +80,7 @@ minZoom: 0,
 maxZoom: 18,
 zoomControl: false,
 layers: [
-    L.tileLayer('https://{s}.tiles.mapbox.com/v3/ona.swgn9udi/{z}/{x}/{y}.png', {
+    L.tileLayer('https://{s}.tiles.mapbox.com/v3/ona.vdv7k3xr/{z}/{x}/{y}.png', {
     maxZoom: 9,
     minZoom: 0,
     attribution: '<a href="http://www.mapbox.com/about/maps/" target="_blank">Terms &amp; Feedback</a>'
