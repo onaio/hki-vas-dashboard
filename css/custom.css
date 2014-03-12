@@ -13,13 +13,14 @@ strong{ font-weight:700; }
 	color:#FFFFFF;
 }
 .header-inner .col-sm-5{
-	padding:1em;
+	padding:1em 1em 1em 2em;
 }
 .header-inner .col-sm-2{
 	padding:1em 0;
 }
 .head-title{
 	font-size:1.2em;
+	text-transform:uppercase;
 }
 .logo-holder{
 	border-left:1px solid #808080;
@@ -32,6 +33,7 @@ strong{ font-weight:700; }
 	background:#F3F3F3;
 	min-height:43em;
 	min-width:14em;
+	padding-left:2em;
 	padding-top:1.2em;
 	position:absolute;
 }
@@ -91,6 +93,14 @@ strong{ font-weight:700; }
 	opacity: 0.7;
 }
 .slidebox{  }
-.slidebox p{
-	margin-bottom:2.5em;
+.slider.slider-horizontal{
+	height:16px;
+	margin-left:2em;
+	width:400px;
+}
+.slider-labels{
+	width:500px;
+}
+.slider-labels span{
+	padding:0 .8em;
 }
