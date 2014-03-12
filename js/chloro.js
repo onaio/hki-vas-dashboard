@@ -78,8 +78,9 @@ var map = L.map('map',
 var map = new L.Map('map', {
 minZoom: 0,
 maxZoom: 18,
+zoomControl: false,
 layers: [
-    L.tileLayer('https://{s}.tiles.mapbox.com/v3/ona.swgn9udi/{z}/{x}/{y}.png', {
+    L.tileLayer('https://{s}.tiles.mapbox.com/v3/ona.vdv7k3xr/{z}/{x}/{y}.png', {
     maxZoom: 9,
     minZoom: 0,
     attribution: '<a href="http://www.mapbox.com/about/maps/" target="_blank">Terms &amp; Feedback</a>'
@@ -91,6 +92,9 @@ layers: [
 })]
 })
 .setView([3,12],4);
+
+
+new L.Control.Zoom({ position: 'bottomleft' }).addTo(map);
 
 // control that shows state info on hover
 var info = L.control();
@@ -365,8 +369,8 @@ loadPECSJSON();
 
 
 
-var pointLayer = omnivore.csv('data/pecs/2013-1-CM.LT.csv')
-.addTo(map);
+//var pointLayer = omnivore.csv('data/pecs/2013-1-CM.LT.csv')
+//.addTo(map);
 
 
 //var heat = L.heatLayer(pointLayer, {radius: 25}).addTo(map);
@@ -441,7 +445,7 @@ function buildPicker() {
 
 
 buildLegend();
-buildPicker();
+//buildPicker();
 
 
 
