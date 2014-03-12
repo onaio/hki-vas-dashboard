@@ -369,8 +369,8 @@ loadPECSJSON();
 
 
 
-var pointLayer = omnivore.csv('data/pecs/2013-1-CM.LT.csv')
-.addTo(map);
+//var pointLayer = omnivore.csv('data/pecs/2013-1-CM.LT.csv')
+//.addTo(map);
 
 
 //var heat = L.heatLayer(pointLayer, {radius: 25}).addTo(map);
