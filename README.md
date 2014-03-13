@@ -22,3 +22,39 @@ See [SOW](sow.md)
 * Senegal – HKI works in Ziguinchor and Diourbel but PECS for this round is national
 * Sierra Leone – HKI works at a national level
 * Tanzania – Administrative data will correspond to location of PEC survey
+
+
+### Pecs Notes
+
+Gender
+
+1
+Male
+2
+Female
+
+
+Received Vitamin A
+0
+No
+1
+Yes
+88
+Don't know
+
+
+Dewormed 
+
+0
+No
+1
+Yes
+88
+Don't know
+
+
+Age_category child
+1
+6-11Months
+2
+12-59Months
