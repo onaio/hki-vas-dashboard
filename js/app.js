@@ -1,13 +1,26 @@
 var MYAPP = {};
 
+var VAS_INDICATORS = {
+    vas_6_11: 'VAS (6-11m)',
+    vas_12_59: 'VAS (12-59m)',
+    vas_6_59: 'VAS (6-59m)',
+    vas_6_59_m: 'VAS (6-59m) Male',
+    vas_6_59_f: 'VAS (6-59m) Female',
+    admin_pecs_6_59: 'Admin PECs 5-59m',
+    admin_nat_6_59: 'Administrative 6-59m',
+    pecs_admin_delta: 'PECs Administrative Delta',
+    dw_1259: 'Deworming (12-59m)'
+}
+
 var setupOptions = {
     year: '2012',
     round: 2,
     code: 'vas_6_59',
-    name: 'VAS (6-59m)'
+    name: VAS_INDICATORS['vas_6_59']
 };
 
-var years = [2011,2012,2013];
+
+var years = [2011, 2012, 2013];
 var rounds = [1,2];
 
 var indicators = {};
@@ -40,20 +53,20 @@ var gen_key = function() {
 };
 
 var map = new L.Map('map', {
-minZoom: 0,
-maxZoom: 18,
-zoomControl: false,
-layers: [
-    L.tileLayer('https://{s}.tiles.mapbox.com/v3/ona.vdv7k3xr/{z}/{x}/{y}.png', {
-    maxZoom: 9,
     minZoom: 0,
-    attribution: '<a href="http://www.mapbox.com/about/maps/" target="_blank">Terms &amp; Feedback</a>'
-}),
-    L.tileLayer('https://{s}.tiles.mapbox.com/v3/ona.hbgm1c4d/{z}/{x}/{y}.png', {
     maxZoom: 18,
-    minZoom: 10,
-    attribution: '<a href="http://www.mapbox.com/about/maps/" target="_blank">Terms &amp; Feedback</a>'
-})]
+    zoomControl: false,
+    layers: [
+        L.tileLayer('https://{s}.tiles.mapbox.com/v3/ona.vdv7k3xr/{z}/{x}/{y}.png', {
+        maxZoom: 9,
+        minZoom: 0,
+        attribution: '<a href="http://www.mapbox.com/about/maps/" target="_blank">Terms &amp; Feedback</a>'
+    }),
+        L.tileLayer('https://{s}.tiles.mapbox.com/v3/ona.hbgm1c4d/{z}/{x}/{y}.png', {
+        maxZoom: 18,
+        minZoom: 10,
+        attribution: '<a href="http://www.mapbox.com/about/maps/" target="_blank">Terms &amp; Feedback</a>'
+    })]
 })
 .setView([3,12],4);
 
@@ -69,9 +82,18 @@ function setReportParameters(year,round) {
     MYAPP.indicator.round = round;
     var options = MYAPP.indicator;
     options.year = year;
-    console.log('Options:' + JSON.stringify(options));
     loadAfricaJSON(options);
 };
+
+function selectIndicator(indicator) {
+    if (indicator === undefined || indicator === null) {
+        indicator = setupOptions.code;
+    }
+    MYAPP.indicator.code = indicator;
+    MYAPP.indicator.name = VAS_INDICATORS[indicator];
+    loadAfricaJSON(MYAPP.indicator);
+    return MYAPP.indicator;
+}
 
 function createJSONFile(json) {
     var geojsonfile = JSON.stringify(json);
@@ -114,8 +136,8 @@ info.update = function (props) {
     var level_note;
     var val;
     var key = gen_key();
-    if (typeof props != "undefined") {
-        if (typeof props[key + '_' +MYAPP.indicator.code] === 'undefined') {
+    if (typeof props !== undefined) {
+        if (typeof props[key + '_' +MYAPP.indicator.code] === undefined) {
             val = 'Not Available';
         } else {
             val = props[key + '_' +MYAPP.indicator.code] + "%";
