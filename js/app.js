@@ -10,7 +10,7 @@ var VAS_INDICATORS = {
     admin_nat_6_59: 'Administrative 6-59m',
     pecs_admin_delta: 'PECs Administrative Delta',
     dw_1259: 'Deworming (12-59m)'
-}
+};
 
 var setupOptions = {
     year: '2012',
@@ -85,15 +85,19 @@ function setReportParameters(year,round) {
     loadAfricaJSON(options);
 };
 
-function selectIndicator(indicator) {
+function selectIndicator(selector, indicator) {
     if (indicator === undefined || indicator === null) {
         indicator = setupOptions.code;
     }
     MYAPP.indicator.code = indicator;
     MYAPP.indicator.name = VAS_INDICATORS[indicator];
     loadAfricaJSON(MYAPP.indicator);
+
+    $('#indicator-list').find('ul li.selected').removeClass('selected');
+    $(selector).parent().addClass('selected');
+
     return MYAPP.indicator;
-}
+};
 
 function createJSONFile(json) {
     var geojsonfile = JSON.stringify(json);
@@ -136,7 +140,7 @@ info.update = function (props) {
     var level_note;
     var val;
     var key = gen_key();
-    if (typeof props !== undefined) {
+    if (typeof props !== "undefined") {
         if (typeof props[key + '_' +MYAPP.indicator.code] === undefined) {
             val = 'Not Available';
         } else {
@@ -163,7 +167,7 @@ function getColor(d) {
         d > 80 ? '#FFDC00' :
             d > 0 ? '#FF4136' :
                 '#ccc';
-}
+};
 
 // style country
 

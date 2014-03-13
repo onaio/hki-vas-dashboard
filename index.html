@@ -55,38 +55,38 @@
 
 <!--<div id="content"></div>-->
 <div class="page-container">
-	<div class="page-sidebar container">
+	<div class="page-sidebar container" id="indicator-list">
 		<!-- BEGIN SIDEBAR MENU -->
 		<div class="navheader">VAS</div>
 		<ul>
-			<li class="selected"><a href="#" onclick="selectIndicator('vas_6_59')">6-59m</a></li>
-			<li><a href="#" onclick="selectIndicator('vas_6_11')">6-11m</a></li>
-			<li><a href="#" onclick="selectIndicator('vas_12_59')">12-59m</a></li>
-			<li><a href="#" onclick="selectIndicator('vas_6_59_f')">6-59m Female</a></li>
-			<li><a href="#" onclick="selectIndicator('vas_6_59_m')">6-59m Male</a></li>
+			<li class="selected"><a href="#" onclick="selectIndicator(this, 'vas_6_59')">6-59m</a></li>
+			<li><a href="#" onclick="selectIndicator(this, 'vas_6_11')">6-11m</a></li>
+			<li><a href="#" onclick="selectIndicator(this, 'vas_12_59')">12-59m</a></li>
+			<li><a href="#" onclick="selectIndicator(this, 'vas_6_59_f')">6-59m Female</a></li>
+			<li><a href="#" onclick="selectIndicator(this, 'vas_6_59_m')">6-59m Male</a></li>
 		</ul>
 		
 		<div class="navheader">Admin</div>
 		<ul class="">
-			<li><a href="#" onclick="selectIndicator('admin_pecs_6_59')">PECs 5-59m</a></li>
+			<li><a href="#" onclick="selectIndicator(this, 'admin_pecs_6_59')">PECs 5-59m</a></li>
 		</ul>
 		
 		<div class="navheader">Administrative</div>
 		<ul class="">
-			<li><a href="#" onclick="selectIndicator('admin_nat_6_59')">6-59m</a></li>
+			<li><a href="#" onclick="selectIndicator(this, 'admin_nat_6_59')">6-59m</a></li>
 		</ul>
 		
 		<div class="navheader">PECS</div>
 		<ul class="">
-			<li><a href="#" onclick="selectIndicator('pecs_admin_delta')">Administrative Delta</a></li>
+			<li><a href="#" onclick="selectIndicator(this, 'pecs_admin_delta')">Administrative Delta</a></li>
 		</ul>
 		
 		<div class="navheader">Deworming</div>
 		<ul class="">
-			<li><a href="#" onclick="selectIndicator('dw_1259')">12-59m</a></li>
+			<li><a href="#" onclick="selectIndicator(this, 'dw_1259')">12-59m</a></li>
 		</ul><br/>
 		<!-- END SIDEBAR MENU -->
-	<br class="cls"/>
+		<br class="cls"/>
 	</div>
 	
 	<div id="map" class="leaflet-container leaflet-fade-anim" tabindex="0" style="position: relative;"></div>
