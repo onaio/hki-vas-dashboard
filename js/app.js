@@ -7,21 +7,15 @@ var setupOptions = {
     name: 'VAS (6-59m)'
 };
 
-MYAPP.indicator = null;
-MYAPP.datajson = null;
-MYAPP.countryjson = null;
-
 var years = [2011,2012,2013];
 var rounds = [1,2];
 
 var indicators = {};
 
+var geojson;
 
-var gen_key = function() {
-    var k;
-    k = MYAPP.indicator.year + '-' + MYAPP.indicator.round;
-    return k;
-};
+// control that shows state info on hover
+var info = L.control();
 
 var colorPalette = ['#8DD3C7', '#FB8072', '#FFFFB3', '#BEBADA', '#80B1D3', '#FDB462', '#B3DE69', '#FCCDE5', '#D9D9D9',
     '#BC80BD', '#CCEBC5', '#FFED6F'];
@@ -35,45 +29,15 @@ var circleStyle = {
     opacity: 0.5
 };
 
-function setYear(year,round) {
-    MYAPP.indicator.year = year;
-    MYAPP.indicator.round = round;
-    var options = MYAPP.indicator;
-    options.year = year;
-    loadAfricaJSON(options);
-};
-
-function createJSONFile(json) {
-    var geojsonfile = JSON.stringify(json);
-  
-    var blob = new Blob([geojsonfile], {type: "application/json"});
-    var url  = URL.createObjectURL(blob);
-
-    var a = document.createElement('a');
-    a.download    = "backup.json";
-    a.href        = url;
-    a.textContent = "Download backup.json";
-    document.getElementById('content').appendChild(a);
-
-};
-
 var hkiTiles = L.tileLayer('https://{s}.tiles.mapbox.com/v3/ona.swgn9udi/{z}/{x}/{y}.png', {
     attribution: '<a href="http://www.mapbox.com/about/maps/" target="_blank">Terms &amp; Feedback</a>',
 });
 
-/*
-var map = L.map('map', 
-    {
-        minZoom: '3',
-        maxZoom: '17'
-    }
-    )
-    .addLayer(hkiTiles)
-    .setView([3, 12], 4);
-*/
-
-
-//ona.hg740ono
+var gen_key = function() {
+    var k;
+    k = MYAPP.indicator.year + '-' + MYAPP.indicator.round;
+    return k;
+};
 
 var map = new L.Map('map', {
 minZoom: 0,
@@ -94,10 +58,51 @@ layers: [
 .setView([3,12],4);
 
 
-new L.Control.Zoom({ position: 'bottomleft' }).addTo(map);
+MYAPP.indicator = null;
+MYAPP.datajson = null;
+MYAPP.countryjson = null;
 
-// control that shows state info on hover
-var info = L.control();
+
+
+function setReportParameters(year,round) {
+    MYAPP.indicator.year = year;
+    MYAPP.indicator.round = round;
+    var options = MYAPP.indicator;
+    options.year = year;
+    console.log('Options:' + JSON.stringify(options));
+    loadAfricaJSON(options);
+};
+
+function createJSONFile(json) {
+    var geojsonfile = JSON.stringify(json);
+  
+    var blob = new Blob([geojsonfile], {type: "application/json"});
+    var url  = URL.createObjectURL(blob);
+
+    var a = document.createElement('a');
+    a.download    = "backup.json";
+    a.href        = url;
+    a.textContent = "Download backup.json";
+    document.getElementById('content').appendChild(a);
+
+};
+
+/*
+var map = L.map('map', 
+    {
+        minZoom: '3',
+        maxZoom: '17'
+    }
+    )
+    .addLayer(hkiTiles)
+    .setView([3, 12], 4);
+*/
+
+
+//ona.hg740ono
+
+
+new L.Control.Zoom({ position: 'bottomleft' }).addTo(map);
 
 info.onAdd = function (map) {
     this._div = L.DomUtil.create('div', 'info');
@@ -190,9 +195,6 @@ function highlightFeature(e) {
 
     info.update(layer.feature.properties);
 };
-
-
-var geojson;
 
 function resetHighlight(e) {
     geojson.resetStyle(e.target);
@@ -433,7 +435,7 @@ function buildPicker() {
             labels = [];
         for (y = 0; y < years.length; y++) {
             for (r = 0; r < rounds.length; r++) {
-                labels.push('<a href="#" onclick="setYear(' + years[y] + ',' + rounds[r] + ');return false;">' + years[y] + ' Round ' + rounds[r] + '</a>');
+                labels.push('<a href="#" onclick="setReportParameters(' + years[y] + ',' + rounds[r] + ');return false;">' + years[y] + ' Round ' + rounds[r] + '</a>');
             }
         }
         div.innerHTML = labels.join('<br>');
