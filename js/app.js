@@ -155,18 +155,17 @@ info.update = function (props) {
         indicator_desc = [],
         key = gen_key();
 
-    console.log(props);
-
     if (typeof props !== "undefined") {
         if (typeof props[key + '_' + MYAPP.indicator.code] === "undefined") {
             indicator_desc = 'Not Available';
         } else {
-            indicator_desc.push('<strong>' + VAS_INDICATORS[MYAPP.indicator.code] + ': ' + props[key + '_' +MYAPP.indicator.code] + "%</strong>");
             $.each(VAS_INDICATORS, function(code, desc){
                 if(MYAPP.indicator.code !== code) {
                     if(props[key + '_' +code] !== undefined) {
                         indicator_desc.push(desc + ': ' + props[key + '_' +code] + "%");
                     }
+                } else {
+                    indicator_desc.push('<strong>' + desc + ': ' + props[key + '_' + code] + "%</strong>");
                 }
             });
             indicator_desc = indicator_desc.slice(0, 5);
@@ -178,8 +177,8 @@ info.update = function (props) {
             level_note = '';
         }
     }
-    this._div.innerHTML = '<h4>' + MYAPP.indicator.name + '</h4>'
-        + '<h4>' + MYAPP.indicator.year + ' (Round ' + MYAPP.indicator.round + ')</h4>'
+    this._div.innerHTML = '<h4>' + MYAPP.indicator.year 
+        + ' (Round ' + MYAPP.indicator.round + ')</h4>'
         + (props ?
         '<b>' + props.name + ' ' + level_note + '</b><br />' + indicator_desc
         : 'Hover over an area');
