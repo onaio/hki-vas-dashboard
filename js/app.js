@@ -151,14 +151,26 @@ info.onAdd = function (map) {
 };
 
 info.update = function (props) {
-    var level_note;
-    var val;
-    var key = gen_key();
+    var level_note,
+        indicator_desc = [],
+        key = gen_key();
+
+    console.log(props);
+
     if (typeof props !== "undefined") {
-        if (typeof props[key + '_' +MYAPP.indicator.code] === "undefined") {
-            val = 'Not Available';
+        if (typeof props[key + '_' + MYAPP.indicator.code] === "undefined") {
+            indicator_desc = 'Not Available';
         } else {
-            val = props[key + '_' +MYAPP.indicator.code] + "%";
+            indicator_desc.push('<strong>' + VAS_INDICATORS[MYAPP.indicator.code] + ': ' + props[key + '_' +MYAPP.indicator.code] + "%</strong>");
+            $.each(VAS_INDICATORS, function(code, desc){
+                if(MYAPP.indicator.code !== code) {
+                    if(props[key + '_' +code] !== undefined) {
+                        indicator_desc.push(desc + ': ' + props[key + '_' +code] + "%");
+                    }
+                }
+            });
+            indicator_desc = indicator_desc.slice(0, 5);
+            indicator_desc = indicator_desc.join('<br/>');
         }
         if (props.level == 'catchment') {
             level_note = '(Catchment)';
@@ -169,7 +181,7 @@ info.update = function (props) {
     this._div.innerHTML = '<h4>' + MYAPP.indicator.name + '</h4>'
         + '<h4>' + MYAPP.indicator.year + ' (Round ' + MYAPP.indicator.round + ')</h4>'
         + (props ?
-        '<b>' + props.name + ' ' + level_note + '</b><br />' + val
+        '<b>' + props.name + ' ' + level_note + '</b><br />' + indicator_desc
         : 'Hover over an area');
 };
 
@@ -243,7 +255,6 @@ function highlightFeature(e) {
     if (!L.Browser.ie && !L.Browser.opera) {
         layer.bringToFront();
     }
-
     info.update(layer.feature.properties);
 };
 
