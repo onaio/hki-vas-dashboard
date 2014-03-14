@@ -9,6 +9,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.css" />
 <link rel="stylesheet" href="css/bootstrap.min.css"/>
+<link href="http://fonts.googleapis.com/css?family=Open+Sans:400,700"/>
 <!--<link rel="stylesheet" type="text/css" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css"/>-->
 <link rel="stylesheet" href="css/slider.css"/>
 <!--<link rel="stylesheet" href="ui/jquery.ui.labeledslider.css"/>-->
@@ -23,15 +24,14 @@
 	<!-- BEGIN TOP NAVIGATION BAR -->
 	<div class="header-inner">
 		<div class="col-sm-5"><br/>
-			<span class="head-title"><strong>HKI Vitamin A Supplement</strong> Coverage</span>
+			<span class="head-title"><strong>HKI Vitamin A Supplementation (VAS)</strong> Coverage</span>
 		</div>
 		<div class="col-sm-5">
 			<div class="slidebox"><br/>
-				<input id="slider" data-slider-id='ex1Slider' type="text" data-slider-min="2011" data-slider-max="2013.5" data-slider-step="0.5" data-slider-value="2012"/>
+				<input id="slider" data-slider-id='ex1Slider' type="text" data-slider-min="2011.5" data-slider-max="2013.5" data-slider-step="0.5" data-slider-value="2012"/>
 				<span id="updateRound"></span>
 				<br/>
 				<div class="slider-labels">
-					<span>2011 R1</span>
 					<span>2011 R2</span>
 					<span>2012 R1</span>
 					<span>2012 R2</span>
@@ -55,39 +55,33 @@
 
 <!--<div id="content"></div>-->
 <div class="page-container">
-	<div class="page-sidebar container">
+	<div class="page-sidebar container" id="indicator-list">
 		<!-- BEGIN SIDEBAR MENU -->
 		<div class="navheader">VAS</div>
 		<ul>
-			<li class="selected"><a href="#">6-59m</a></li>
-			<li><a href="#">6-11m</a></li>
-			<li><a href="#">12-59m</a></li>
-			<li><a href="#">6-59m Female</a></li>
-			<li><a href="#">6-59m Male</a></li>
+			<li class="selected"><a href="#" onclick="selectIndicator(this, 'vas_6_59')">6-59m</a></li>
+			<li><a href="#" onclick="selectIndicator(this, 'vas_6_11')">6-11m</a></li>
+			<li><a href="#" onclick="selectIndicator(this, 'vas_12_59')">12-59m</a></li>
+			<li><a href="#" onclick="selectIndicator(this, 'vas_6_59_f')">6-59m Female</a></li>
+			<li><a href="#" onclick="selectIndicator(this, 'vas_6_59_m')">6-59m Male</a></li>
 		</ul>
-		
-		<div class="navheader">Admin</div>
-		<ul class="">
-			<li><a href="#">PECs 5-59m</a></li>
-		</ul>
-		
 		<div class="navheader">Administrative</div>
 		<ul class="">
-			<li><a href="#">6-59m</a></li>
+			<li><a href="#" onclick="selectIndicator(this, 'admin_pecs_6_59')">Catchment (6-59m)</a></li>
+			<li><a href="#" onclick="selectIndicator(this, 'admin_nat_6_59')">National 6-59m</a></li>
 		</ul>
 		
-		<div class="navheader">PECS</div>
+		<div class="navheader">Difference</div>
 		<ul class="">
-			<li><a href="#">Administrative</a></li>
-			<li><a href="#">Delta</a></li>
+			<li><a href="#" onclick="selectIndicator(this, 'pecs_admin_delta')">Pecs Admin &Delta;</a></li>
 		</ul>
 		
 		<div class="navheader">Deworming</div>
 		<ul class="">
-			<li><a href="#">12-59m</a></li>
+			<li><a href="#" onclick="selectIndicator(this, 'dw_1259')">12-59m</a></li>
 		</ul><br/>
 		<!-- END SIDEBAR MENU -->
-	<br class="cls"/>
+		<br class="cls"/>
 	</div>
 	
 	<div id="map" class="leaflet-container leaflet-fade-anim" tabindex="0" style="position: relative;"></div>
@@ -97,10 +91,10 @@
 <script src="js/underscore-min.js"></script>
 <script src="js/queue.v1.min.js"></script>
 <script src="js/topojson.min.js"></script>
-<script src="js/app.js"></script>
 <script src="js/jquery.min.js"></script>
-<script src="js/bootstrap-slider.js"></script>
 <script src="js/leaflet-heat.js"></script>
+<script src="js/bootstrap-slider.js"></script>
+<script src="js/app.js"></script>
 <!--<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>-->
 <!--<script src="ui/jquery.ui.labeledslider.js"></script>-->
 
@@ -111,7 +105,7 @@ var slider = $("#slider"),
 	round = 0;
 
 slider.slider({
-//	tooltip: 'always',
+	tooltip: 'none',
 	formater: function(value){
 		year = Math.floor(value);
 		round = (Math.round(value)-year)+1;

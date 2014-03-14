@@ -1,13 +1,27 @@
 var MYAPP = {};
 
+var VAS_INDICATORS = {
+    vas_6_11: 'VAS (6-11m)',
+    vas_12_59: 'VAS (12-59m)',
+    vas_6_59: 'VAS (6-59m)',
+    vas_6_59_m: 'VAS (6-59m) Male',
+    vas_6_59_f: 'VAS (6-59m) Female',
+    admin_pecs_6_59: 'Administrative Catchment (6-59m)',
+    admin_nat_6_59: 'Administrative 6-59m',
+    pecs_admin_delta: 'PECs Administrative &Delta;',
+    dw_1259: 'Deworming (12-59m)'
+};
+
 var setupOptions = {
     year: '2012',
     round: 2,
     code: 'vas_6_59',
-    name: 'VAS (6-59m)'
+    name: VAS_INDICATORS['vas_6_59']
 };
 
-var years = [2011,2012,2013];
+
+var years = [2011, 2012, 2013];
+
 var rounds = [1,2];
 
 var indicators = {};
@@ -16,6 +30,9 @@ var geojson;
 
 // control that shows state info on hover
 var info = L.control();
+
+// Map legend
+var legend = L.control({position: 'bottomright'});
 
 var colorPalette = ['#8DD3C7', '#FB8072', '#FFFFB3', '#BEBADA', '#80B1D3', '#FDB462', '#B3DE69', '#FCCDE5', '#D9D9D9',
     '#BC80BD', '#CCEBC5', '#FFED6F'];
@@ -40,26 +57,27 @@ var gen_key = function() {
 };
 
 var map = new L.Map('map', {
-minZoom: 0,
-maxZoom: 18,
-zoomControl: false,
-layers: [
-    L.tileLayer('https://{s}.tiles.mapbox.com/v3/ona.vdv7k3xr/{z}/{x}/{y}.png', {
-    maxZoom: 9,
     minZoom: 0,
-    attribution: '<a href="http://www.mapbox.com/about/maps/" target="_blank">Terms &amp; Feedback</a>'
-}),
-    L.tileLayer('https://{s}.tiles.mapbox.com/v3/ona.hbgm1c4d/{z}/{x}/{y}.png', {
     maxZoom: 18,
-    minZoom: 10,
-    attribution: '<a href="http://www.mapbox.com/about/maps/" target="_blank">Terms &amp; Feedback</a>'
-})]
+    zoomControl: false,
+    layers: [
+        L.tileLayer('https://{s}.tiles.mapbox.com/v3/ona.vdv7k3xr/{z}/{x}/{y}.png', {
+        maxZoom: 9,
+        minZoom: 0,
+        attribution: '<a href="http://www.mapbox.com/about/maps/" target="_blank">Terms &amp; Feedback</a>'
+    }),
+        L.tileLayer('https://{s}.tiles.mapbox.com/v3/ona.hbgm1c4d/{z}/{x}/{y}.png', {
+        maxZoom: 18,
+        minZoom: 10,
+        attribution: '<a href="http://www.mapbox.com/about/maps/" target="_blank">Terms &amp; Feedback</a>'
+    })]
 })
 .setView([3,12],4);
 
 
 MYAPP.indicator = null;
-MYAPP.datajson = null;
+MYAPP.country_datajson = null;
+MYAPP.pecs_datajson = null;
 MYAPP.countryjson = null;
 
 
@@ -69,9 +87,31 @@ function setReportParameters(year,round) {
     MYAPP.indicator.round = round;
     var options = MYAPP.indicator;
     options.year = year;
-    console.log('Options:' + JSON.stringify(options));
-    loadAfricaJSON(options);
+    loadJSONData();
 };
+
+function selectIndicator(selector, indicator) {
+    if (indicator === undefined || indicator === null) {
+        indicator = setupOptions.code;
+    }
+    MYAPP.indicator.code = indicator;
+    MYAPP.indicator.name = VAS_INDICATORS[indicator];
+
+    loadJSONData();
+    $('#indicator-list').find('ul li.selected').removeClass('selected');
+    $(selector).parent().addClass('selected');
+
+    return MYAPP.indicator;
+};
+
+function loadJSONData(){
+    if (MYAPP.indicator.code === 'admin_nat_6_59') {
+        loadCountryJSON(MYAPP.indicator);
+    } else {
+        loadPECSJSON(MYAPP.indicator);
+    }
+    buildLegend();
+}
 
 function createJSONFile(json) {
     var geojsonfile = JSON.stringify(json);
@@ -111,14 +151,25 @@ info.onAdd = function (map) {
 };
 
 info.update = function (props) {
-    var level_note;
-    var val;
-    var key = gen_key();
-    if (typeof props != "undefined") {
-        if (typeof props[key + '_' +MYAPP.indicator.code] === 'undefined') {
-            val = 'Not Available';
+    var level_note,
+        indicator_desc = [],
+        key = gen_key();
+
+    if (typeof props !== "undefined") {
+        if (typeof props[key + '_' + MYAPP.indicator.code] === "undefined") {
+            indicator_desc = 'Not Available';
         } else {
-            val = props[key + '_' +MYAPP.indicator.code] + "%";
+            $.each(VAS_INDICATORS, function(code, desc){
+                if(MYAPP.indicator.code !== code) {
+                    if(props[key + '_' +code] !== undefined) {
+                        indicator_desc.push(desc + ': ' + props[key + '_' +code] + "%");
+                    }
+                } else {
+                    indicator_desc.push('<strong>' + desc + ': ' + props[key + '_' + code] + "%</strong>");
+                }
+            });
+            indicator_desc = indicator_desc.slice(0, 5);
+            indicator_desc = indicator_desc.join('<br/>');
         }
         if (props.level == 'catchment') {
             level_note = '(Catchment)';
@@ -126,10 +177,10 @@ info.update = function (props) {
             level_note = '';
         }
     }
-    this._div.innerHTML = '<h4>' + MYAPP.indicator.name + '</h4>'
-        + '<h4>' + MYAPP.indicator.year + ' (Round ' + MYAPP.indicator.round + ')</h4>'
+    this._div.innerHTML = '<h4>' + MYAPP.indicator.year 
+        + ' (Round ' + MYAPP.indicator.round + ')</h4>'
         + (props ?
-        '<b>' + props.name + ' ' + level_note + '</b><br />' + val
+        '<b>' + props.name + ' ' + level_note + '</b><br />' + indicator_desc
         : 'Hover over an area');
 };
 
@@ -137,11 +188,22 @@ info.update = function (props) {
 // set country colors
 
 function getColor(d) {
+
+    if (MYAPP.indicator.code != 'pecs_admin_delta') {
     return d > 90 ? '#2ECC40' :
         d > 80 ? '#FFDC00' :
             d > 0 ? '#FF4136' :
                 '#ccc';
-}
+            } else {
+    
+    return d > 20 ? '#FF4136' :
+        d > 10 ? '#FFDC00' :
+            d > 0 ? '#2ECC40' :
+                '#ccc';
+            }
+};
+
+
 
 // style country
 
@@ -192,7 +254,6 @@ function highlightFeature(e) {
     if (!L.Browser.ie && !L.Browser.opera) {
         layer.bringToFront();
     }
-
     info.update(layer.feature.properties);
 };
 
@@ -213,8 +274,8 @@ function onEachFeature(feature, layer) {
     });
 };
 
-function loadAfricaJSON(options) {
-    if (options === undefined || options === null) {
+function loadCountryJSON(options) {
+        if (options === undefined || options === null) {
         options = setupOptions;
     }
 
@@ -230,7 +291,7 @@ function loadAfricaJSON(options) {
         if (map.hasLayer(geojson)) {
             map.removeLayer(geojson);
         }
-        geojson = L.geoJson(MYAPP.datajson, {
+        geojson = L.geoJson(MYAPP.country_datajson, {
             style: style,
             onEachFeature: onEachFeature
         });
@@ -240,7 +301,7 @@ function loadAfricaJSON(options) {
 
 
 
-    if (MYAPP.datajson === null) {
+    if (MYAPP.country_datajson === null) {
         d3.csv("data/hki-vas-data.csv", function (data) {
             var allyears;
             d3.json("data/africa.json", function (json) {
@@ -257,9 +318,7 @@ function loadAfricaJSON(options) {
                         var jsonCountry = json.features[j].properties.iso_a2;
                         if (dataCountry == jsonCountry) {
                             //Copy the data value into the JSON
-                            json.features[j].properties[key + '_pecs'] = parseFloat(data[i].pecs);
-                            json.features[j].properties[key + '_admin_coverage'] = parseFloat(data[i].admin_coverage);
-                            json.features[j].properties[key + '_pecs_admin_delta'] = parseFloat(data[i].pecs_admin_delta);
+                            json.features[j].properties[key + '_admin_nat_6_59'] = parseFloat(data[i].admin_nat_6_59);
                             json.features[j].properties[key + '_level'] = data[i].level;
                             //Stop looking through the JSON
                             break;
@@ -267,7 +326,7 @@ function loadAfricaJSON(options) {
                     }
                 }
 
-                MYAPP.datajson = json;
+                MYAPP.country_datajson = json;
 
                 if (callback !== null) {
                     callback(true);
@@ -302,7 +361,7 @@ function loadPECSJSON(options) {
         if (map.hasLayer(geojson)) {
             map.removeLayer(geojson);
         }
-        geojson = L.geoJson(MYAPP.datajson, {
+        geojson = L.geoJson(MYAPP.pecs_datajson, {
             style: style,
             onEachFeature: onEachFeature
         });
@@ -310,7 +369,7 @@ function loadPECSJSON(options) {
 
     };
 
-    if (MYAPP.datajson === null) {
+    if (MYAPP.pecs_datajson === null) {
 
         d3.csv("data/hki-vas-data.csv", function (data) {
             var allyears;
@@ -338,6 +397,7 @@ function loadPECSJSON(options) {
                             json.features[j].properties[key + '_vas_6_59'] = parseFloat(data[i].vas_6_59);
                             json.features[j].properties[key + '_vas_6_59_f'] = parseFloat(data[i].vas_6_59_f);
                             json.features[j].properties[key + '_vas_6_59_m'] = parseFloat(data[i].vas_6_59_m);
+                            json.features[j].properties[key + '_dw_1259'] = parseFloat(data[i].vas_6_59_m);
                             json.features[j].properties[key + '_admin_pecs_6_59'] = parseFloat(data[i].admin_pecs_6_59);
                             json.features[j].properties[key + '_pecs_admin_delta'] = parseFloat(data[i].pecs_admin_delta);
                             json.features[j].properties[key + '_admin_nat_6_59'] = parseFloat(data[i].admin_nat_6_59);
@@ -348,7 +408,7 @@ function loadPECSJSON(options) {
                     }
                 }
                
-                MYAPP.datajson = json;
+                MYAPP.pecs_datajson = json;
                 
                 // create JSON File
                 //createJSONFile(MYAPP.datajson);
@@ -408,17 +468,22 @@ L.geoJson(someGeojsonFeature, {
 // Build Legend
 
 function buildLegend () {
-    var legend = L.control({position: 'bottomright'});
-
+    if(legend.getContainer() !== undefined) {
+        legend.removeFrom(map);    
+    }
+    
     legend.onAdd = function (map) {
-
         var div = L.DomUtil.create('div', 'info legend'),
             labels = [];
-
-        labels.push('<i style="background:#2ECC40"></i> 90&ndash;100%');
-        labels.push('<i style="background:#FFDC00"></i> 80&ndash;89%');
-        labels.push('<i style="background:#FF4136"></i> < 80%');
-
+        if (MYAPP.indicator.code != 'pecs_admin_delta') {
+            labels.push('<i style="background:#2ECC40"></i> 90&ndash;100%');
+            labels.push('<i style="background:#FFDC00"></i> 80&ndash;89%');
+            labels.push('<i style="background:#FF4136"></i> < 80%');
+        } else {
+            labels.push('<i style="background:#FF4136"></i> 20&ndash;100%');
+            labels.push('<i style="background:#FFDC00"></i> 10&ndash;20%');
+            labels.push('<i style="background:#2ECC40"></i> 0&ndash;10%');
+        }
         div.innerHTML = labels.join('<br>');
         return div;
     };
