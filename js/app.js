@@ -6,9 +6,9 @@ var VAS_INDICATORS = {
     vas_6_59: 'VAS (6-59m)',
     vas_6_59_m: 'VAS (6-59m) Male',
     vas_6_59_f: 'VAS (6-59m) Female',
-    admin_pecs_6_59: 'Admin PECs 5-59m',
+    admin_pecs_6_59: 'Administrative Catchment (6-59m)',
     admin_nat_6_59: 'Administrative 6-59m',
-    pecs_admin_delta: 'PECs Administrative Delta',
+    pecs_admin_delta: 'PECs Administrative &Delta;',
     dw_1259: 'Deworming (12-59m)'
 };
 
