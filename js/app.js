@@ -72,7 +72,8 @@ var map = new L.Map('map', {
 
 
 MYAPP.indicator = null;
-MYAPP.datajson = null;
+MYAPP.country_datajson = null;
+MYAPP.pecs_datajson = null;
 MYAPP.countryjson = null;
 
 
@@ -82,7 +83,11 @@ function setReportParameters(year,round) {
     MYAPP.indicator.round = round;
     var options = MYAPP.indicator;
     options.year = year;
-    loadAfricaJSON(options);
+    if (MYAPP.indicator.code === 'admin_nat_6_59') {
+        loadCountryJSON(MYAPP.indicator);
+    } else {
+        loadPECSJSON(MYAPP.indicator);
+    }
 };
 
 function selectIndicator(selector, indicator) {
@@ -93,7 +98,7 @@ function selectIndicator(selector, indicator) {
     MYAPP.indicator.name = VAS_INDICATORS[indicator];
 
     if (MYAPP.indicator.code === 'admin_nat_6_59') {
-        loadAfricaJSON(MYAPP.indicator);
+        loadCountryJSON(MYAPP.indicator);
     } else {
         loadPECSJSON(MYAPP.indicator);
     }
@@ -244,8 +249,8 @@ function onEachFeature(feature, layer) {
     });
 };
 
-function loadAfricaJSON(options) {
-    if (options === undefined || options === null) {
+function loadCountryJSON(options) {
+        if (options === undefined || options === null) {
         options = setupOptions;
     }
 
@@ -261,7 +266,7 @@ function loadAfricaJSON(options) {
         if (map.hasLayer(geojson)) {
             map.removeLayer(geojson);
         }
-        geojson = L.geoJson(MYAPP.datajson, {
+        geojson = L.geoJson(MYAPP.country_datajson, {
             style: style,
             onEachFeature: onEachFeature
         });
@@ -271,7 +276,7 @@ function loadAfricaJSON(options) {
 
 
 
-    if (MYAPP.datajson === null) {
+    if (MYAPP.country_datajson === null) {
         d3.csv("data/hki-vas-data.csv", function (data) {
             var allyears;
             d3.json("data/africa.json", function (json) {
@@ -288,9 +293,7 @@ function loadAfricaJSON(options) {
                         var jsonCountry = json.features[j].properties.iso_a2;
                         if (dataCountry == jsonCountry) {
                             //Copy the data value into the JSON
-                            json.features[j].properties[key + '_pecs'] = parseFloat(data[i].pecs);
-                            json.features[j].properties[key + '_admin_coverage'] = parseFloat(data[i].admin_coverage);
-                            json.features[j].properties[key + '_pecs_admin_delta'] = parseFloat(data[i].pecs_admin_delta);
+                            json.features[j].properties[key + '_admin_nat_6_59'] = parseFloat(data[i].admin_nat_6_59);
                             json.features[j].properties[key + '_level'] = data[i].level;
                             //Stop looking through the JSON
                             break;
@@ -298,7 +301,7 @@ function loadAfricaJSON(options) {
                     }
                 }
 
-                MYAPP.datajson = json;
+                MYAPP.country_datajson = json;
 
                 if (callback !== null) {
                     callback(true);
@@ -333,7 +336,7 @@ function loadPECSJSON(options) {
         if (map.hasLayer(geojson)) {
             map.removeLayer(geojson);
         }
-        geojson = L.geoJson(MYAPP.datajson, {
+        geojson = L.geoJson(MYAPP.pecs_datajson, {
             style: style,
             onEachFeature: onEachFeature
         });
@@ -341,7 +344,7 @@ function loadPECSJSON(options) {
 
     };
 
-    if (MYAPP.datajson === null) {
+    if (MYAPP.pecs_datajson === null) {
 
         d3.csv("data/hki-vas-data.csv", function (data) {
             var allyears;
@@ -380,7 +383,7 @@ function loadPECSJSON(options) {
                     }
                 }
                
-                MYAPP.datajson = json;
+                MYAPP.pecs_datajson = json;
                 
                 // create JSON File
                 //createJSONFile(MYAPP.datajson);
