@@ -21,6 +21,7 @@ var setupOptions = {
 
 
 var years = [2011, 2012, 2013];
+
 var rounds = [1,2];
 
 var indicators = {};
@@ -173,11 +174,22 @@ info.update = function (props) {
 // set country colors
 
 function getColor(d) {
+
+    if (MYAPP.indicator.code != 'pecs_admin_delta') {
     return d > 90 ? '#2ECC40' :
         d > 80 ? '#FFDC00' :
             d > 0 ? '#FF4136' :
                 '#ccc';
+            } else {
+    
+    return d > 20 ? '#FF4136' :
+        d > 10 ? '#FFDC00' :
+            d > 0 ? '#2ECC40' :
+                '#ccc';
+            }
 };
+
+
 
 // style country
 
@@ -450,9 +462,15 @@ function buildLegend () {
         var div = L.DomUtil.create('div', 'info legend'),
             labels = [];
 
+    if (MYAPP.indicator.code != 'pecs_admin_delta') {
         labels.push('<i style="background:#2ECC40"></i> 90&ndash;100%');
         labels.push('<i style="background:#FFDC00"></i> 80&ndash;89%');
         labels.push('<i style="background:#FF4136"></i> < 80%');
+    } else {
+        labels.push('<i style="background:#FF4136"></i> 20&ndash;100%');
+        labels.push('<i style="background:#FFDC00"></i> 10&ndash;20%');
+        labels.push('<i style="background:#2ECC40"></i> 0&ndash;10%');
+    }
 
         div.innerHTML = labels.join('<br>');
         return div;
