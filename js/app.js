@@ -31,6 +31,9 @@ var geojson;
 // control that shows state info on hover
 var info = L.control();
 
+// Map legend
+var legend = L.control({position: 'bottomright'});
+
 var colorPalette = ['#8DD3C7', '#FB8072', '#FFFFB3', '#BEBADA', '#80B1D3', '#FDB462', '#B3DE69', '#FCCDE5', '#D9D9D9',
     '#BC80BD', '#CCEBC5', '#FFED6F'];
 
@@ -84,11 +87,7 @@ function setReportParameters(year,round) {
     MYAPP.indicator.round = round;
     var options = MYAPP.indicator;
     options.year = year;
-    if (MYAPP.indicator.code === 'admin_nat_6_59') {
-        loadCountryJSON(MYAPP.indicator);
-    } else {
-        loadPECSJSON(MYAPP.indicator);
-    }
+    loadJSONData();
 };
 
 function selectIndicator(selector, indicator) {
@@ -98,17 +97,21 @@ function selectIndicator(selector, indicator) {
     MYAPP.indicator.code = indicator;
     MYAPP.indicator.name = VAS_INDICATORS[indicator];
 
-    if (MYAPP.indicator.code === 'admin_nat_6_59') {
-        loadCountryJSON(MYAPP.indicator);
-    } else {
-        loadPECSJSON(MYAPP.indicator);
-    }
-
+    loadJSONData();
     $('#indicator-list').find('ul li.selected').removeClass('selected');
     $(selector).parent().addClass('selected');
 
     return MYAPP.indicator;
 };
+
+function loadJSONData(){
+    if (MYAPP.indicator.code === 'admin_nat_6_59') {
+        loadCountryJSON(MYAPP.indicator);
+    } else {
+        loadPECSJSON(MYAPP.indicator);
+    }
+    buildLegend();
+}
 
 function createJSONFile(json) {
     var geojsonfile = JSON.stringify(json);
@@ -455,23 +458,22 @@ L.geoJson(someGeojsonFeature, {
 // Build Legend
 
 function buildLegend () {
-    var legend = L.control({position: 'bottomright'});
-
+    if(legend.getContainer() !== undefined) {
+        legend.removeFrom(map);    
+    }
+    
     legend.onAdd = function (map) {
-
         var div = L.DomUtil.create('div', 'info legend'),
             labels = [];
-
-    if (MYAPP.indicator.code != 'pecs_admin_delta') {
-        labels.push('<i style="background:#2ECC40"></i> 90&ndash;100%');
-        labels.push('<i style="background:#FFDC00"></i> 80&ndash;89%');
-        labels.push('<i style="background:#FF4136"></i> < 80%');
-    } else {
-        labels.push('<i style="background:#FF4136"></i> 20&ndash;100%');
-        labels.push('<i style="background:#FFDC00"></i> 10&ndash;20%');
-        labels.push('<i style="background:#2ECC40"></i> 0&ndash;10%');
-    }
-
+        if (MYAPP.indicator.code != 'pecs_admin_delta') {
+            labels.push('<i style="background:#2ECC40"></i> 90&ndash;100%');
+            labels.push('<i style="background:#FFDC00"></i> 80&ndash;89%');
+            labels.push('<i style="background:#FF4136"></i> < 80%');
+        } else {
+            labels.push('<i style="background:#FF4136"></i> 20&ndash;100%');
+            labels.push('<i style="background:#FFDC00"></i> 10&ndash;20%');
+            labels.push('<i style="background:#2ECC40"></i> 0&ndash;10%');
+        }
         div.innerHTML = labels.join('<br>');
         return div;
     };
