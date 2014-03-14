@@ -91,7 +91,12 @@ function selectIndicator(selector, indicator) {
     }
     MYAPP.indicator.code = indicator;
     MYAPP.indicator.name = VAS_INDICATORS[indicator];
-    loadAfricaJSON(MYAPP.indicator);
+
+    if (MYAPP.indicator.code === 'admin_nat_6_59') {
+        loadAfricaJSON(MYAPP.indicator);
+    } else {
+        loadPECSJSON(MYAPP.indicator);
+    }
 
     $('#indicator-list').find('ul li.selected').removeClass('selected');
     $(selector).parent().addClass('selected');
