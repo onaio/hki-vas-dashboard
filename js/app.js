@@ -155,7 +155,7 @@ info.update = function (props) {
     var val;
     var key = gen_key();
     if (typeof props !== "undefined") {
-        if (typeof props[key + '_' +MYAPP.indicator.code] === undefined) {
+        if (typeof props[key + '_' +MYAPP.indicator.code] === "undefined") {
             val = 'Not Available';
         } else {
             val = props[key + '_' +MYAPP.indicator.code] + "%";
