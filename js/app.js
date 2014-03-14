@@ -364,6 +364,7 @@ function loadPECSJSON(options) {
                             json.features[j].properties[key + '_vas_6_59'] = parseFloat(data[i].vas_6_59);
                             json.features[j].properties[key + '_vas_6_59_f'] = parseFloat(data[i].vas_6_59_f);
                             json.features[j].properties[key + '_vas_6_59_m'] = parseFloat(data[i].vas_6_59_m);
+                            json.features[j].properties[key + '_dw_1259'] = parseFloat(data[i].vas_6_59_m);
                             json.features[j].properties[key + '_admin_pecs_6_59'] = parseFloat(data[i].admin_pecs_6_59);
                             json.features[j].properties[key + '_pecs_admin_delta'] = parseFloat(data[i].pecs_admin_delta);
                             json.features[j].properties[key + '_admin_nat_6_59'] = parseFloat(data[i].admin_nat_6_59);
