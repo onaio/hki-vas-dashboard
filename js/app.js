@@ -46,9 +46,6 @@ var circleStyle = {
     opacity: 0.5
 };
 
-var hkiTiles = L.tileLayer('https://{s}.tiles.mapbox.com/v3/ona.swgn9udi/{z}/{x}/{y}.png', {
-    attribution: '<a href="http://www.mapbox.com/about/maps/" target="_blank">Terms &amp; Feedback</a>',
-});
 
 var gen_key = function() {
     var k;
@@ -61,7 +58,7 @@ var map = new L.Map('map', {
     maxZoom: 18,
     zoomControl: false,
     layers: [
-        L.tileLayer('https://{s}.tiles.mapbox.com/v3/ona.vdv7k3xr/{z}/{x}/{y}.png', {
+        L.tileLayer('https://{s}.tiles.mapbox.com/v3/ona.sr6kcsor/{z}/{x}/{y}.png', {
         maxZoom: 9,
         minZoom: 0,
         attribution: '<a href="http://www.mapbox.com/about/maps/" target="_blank">Terms &amp; Feedback</a>'
