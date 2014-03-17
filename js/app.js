@@ -97,6 +97,7 @@ var loadMap = function(isCountryJson) {
 
     markerLayerGroup = L.layerGroup(markersList);
     markerLayerGroup.addTo(map);
+    loadPointLayers();
 
 };
 
@@ -355,8 +356,6 @@ function loadCountryJSON(options) {
 };
 
 
-
-
 function loadPECSJSON(options) {
     if (options === undefined || options === null) {
         options = setupOptions;
@@ -425,12 +424,30 @@ function loadPECSJSON(options) {
 
 loadPECSJSON();
 //loadAfricaJSON();
+var pointLayers = []
 
-// var pointLayer = omnivore.csv('data/pecs/2013-1-CM.LT.csv')
-// .addTo(map);
+function loadPointLayers() {
+    key = gen_key();
+    if(pointLayers.length > 0) {
+        for(i=0; i<pointLayers.length; i++) {
+            if (map.hasLayer(pointLayers[i])) {
+                map.removeLayer(pointLayers[i]);
+            }
+        }
+        pointLayers = [];
+    }
+    if(key === '2013-1') {
+        pointLayers.push(omnivore.csv('data/pecs/CM.LT-2013-1.csv'));
+    } else if(key === '2013-2') {
+        pointLayers.push(omnivore.csv('data/pecs/CM.LT-2013-2.csv'));
+    }
 
+    for(i=0; i<pointLayers.length; i++) {
+        pointLayers[i].addTo(map);
+    }
+}
 
-//var heat = L.heatLayer(pointLayer, {radius: 25}).addTo(map);
+// var heat = L.heatLayer(pointLayer, {radius: 25}).addTo(map);
 
 //pointLayer.addTo(map);
 
