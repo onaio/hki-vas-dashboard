@@ -28,6 +28,7 @@ var indicators = {};
 
 var geojson;
 
+var markersList = []
 var markerLayerGroup;
 
 // control that shows state info on hover
@@ -73,6 +74,31 @@ var map = new L.Map('map', {
 })
 .setView([3,12],4);
 
+var loadMap = function(isCountryJson) {
+    if (map.hasLayer(geojson)) {
+        map.removeLayer(geojson);
+    }
+    if (map.hasLayer(markerLayerGroup)) {
+        markersList = [];
+        map.removeLayer(markerLayerGroup);
+    }
+    if(isCountryJson) {
+        geojson = L.geoJson(MYAPP.country_datajson, {
+            style: style,
+            onEachFeature: onEachFeature
+        });
+    } else {
+        geojson = L.geoJson(MYAPP.pecs_datajson, {
+            style: style,
+            onEachFeature: onEachFeature
+        });
+    }
+    map.addLayer(geojson);
+
+    markerLayerGroup = L.layerGroup(markersList);
+    markerLayerGroup.addTo(map);
+
+};
 
 MYAPP.indicator = null;
 MYAPP.country_datajson = null;
@@ -266,6 +292,13 @@ function zoomToFeature(e) {
 };
 
 function onEachFeature(feature, layer) {
+    var lat, lng, latlng;
+    lat = feature.properties[gen_key() + '_pecs_lat']
+    lng = feature.properties[gen_key() + '_pecs_long']
+    if(!isNaN(lat) && !isNaN(lng)) {
+        latlng = L.latLng(lat, lng);
+        markersList.push(L.marker(latlng));
+    }
     layer.on({
         mouseover: highlightFeature,
         mouseout: resetHighlight,
@@ -278,27 +311,12 @@ function loadCountryJSON(options) {
         options = setupOptions;
     }
 
-
     MYAPP.indicator = options;
 
     try {
         map.removeControl(info);
     } catch (e) {}
     info.addTo(map);
-
-    var callback = function (first) {
-        if (map.hasLayer(geojson)) {
-            map.removeLayer(geojson);
-        }
-        geojson = L.geoJson(MYAPP.country_datajson, {
-            style: style,
-            onEachFeature: onEachFeature
-        });
-        map.addLayer(geojson);
-
-    };
-
-
 
     if (MYAPP.country_datajson === null) {
         d3.csv("data/hki-vas-data.csv", function (data) {
@@ -327,15 +345,11 @@ function loadCountryJSON(options) {
 
                 MYAPP.country_datajson = json;
 
-                if (callback !== null) {
-                    callback(true);
-                }
+                loadMap(true);
             });
         });
     } else {
-        if (callback !== null) {
-            callback(false);
-        }
+        loadMap(true);
     }
 
 };
@@ -348,25 +362,12 @@ function loadPECSJSON(options) {
         options = setupOptions;
     }
 
-
     MYAPP.indicator = options;
 
     try {
         map.removeControl(info);
     } catch (e) {}
     info.addTo(map);
-
-    var callback = function() {
-        if (map.hasLayer(geojson)) {
-            map.removeLayer(geojson);
-        }
-        geojson = L.geoJson(MYAPP.pecs_datajson, {
-            style: style,
-            onEachFeature: onEachFeature
-        });
-        map.addLayer(geojson);
-        displayMarkers();
-    };
 
     if (MYAPP.pecs_datajson === null) {
 
@@ -413,37 +414,17 @@ function loadPECSJSON(options) {
                 
                 // create JSON File
                 //createJSONFile(MYAPP.datajson);
-                callback();
+                loadMap(false);
             });
         });
     } else {
-        callback();
+        loadMap(false);
     }
 
 };
 
 loadPECSJSON();
 //loadAfricaJSON();
-
-var displayMarkers = function(latlng) {
-    var markers = [],
-        lat, lng, latlng;
-    if (map.hasLayer(markerLayerGroup)) {
-        map.removeLayer(markerLayerGroup);
-    }
-    $.each(MYAPP.pecs_datajson.features, function(index, features){
-        lat = features.properties[gen_key() + '_pecs_lat']
-        lng = features.properties[gen_key() + '_pecs_long']
-        if(!isNaN(lat) && !isNaN(lng)) {
-            latlng = L.latLng(lat, lng);
-            markers.push(L.marker(latlng));
-        }
-    });
-    markerLayerGroup = L.layerGroup(markers)
-                        .addTo(map);
-
-}
-
 
 // var pointLayer = omnivore.csv('data/pecs/2013-1-CM.LT.csv')
 // .addTo(map);
