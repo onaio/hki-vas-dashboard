@@ -440,8 +440,9 @@ function loadPointLayers() {
         pointLayers.push(omnivore.csv('data/pecs/CM.LT-2013-1.csv'));
     } else if(key === '2013-2') {
         pointLayers.push(omnivore.csv('data/pecs/CM.LT-2013-2.csv'));
+    } else {
+        return;
     }
-
     for(i=0; i<pointLayers.length; i++) {
         pointLayers[i].addTo(map);
     }
