@@ -9,13 +9,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.css" />
 <link rel="stylesheet" href="css/bootstrap.min.css"/>
-<link href="http://fonts.googleapis.com/css?family=Open+Sans:400,700"/>
-<!--<link rel="stylesheet" type="text/css" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css"/>-->
+<link href="//fonts.googleapis.com/css?family=Open+Sans:400,700"/>
+<!--<link rel="stylesheet" type="text/css" href="//code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css"/>-->
 <link rel="stylesheet" href="css/slider.css"/>
 <!--<link rel="stylesheet" href="ui/jquery.ui.labeledslider.css"/>-->
 <link rel="stylesheet" href="css/custom.css"/>
 
-<script src="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.js"></script>
+<script src="//cdn.leafletjs.com/leaflet-0.7.2/leaflet.js"></script>
 <script src='//api.tiles.mapbox.com/mapbox.js/plugins/leaflet-omnivore/v0.0.0/leaflet-omnivore.min.js'></script>
 </head>
 <body>
@@ -40,7 +40,7 @@
 				</div>
 			</div>
 		</div>
-		
+
 		<div class="col-sm-2 logo-holder">
 			<!-- BEGIN LOGO -->
 			<a class="navbar-brand" href="index.html">
@@ -70,12 +70,12 @@
 			<li><a href="#" onclick="selectIndicator(this, 'admin_pecs_6_59')">Catchment (6-59m)</a></li>
 			<li><a href="#" onclick="selectIndicator(this, 'admin_nat_6_59')">National 6-59m</a></li>
 		</ul>
-		
+
 		<div class="navheader">Difference</div>
 		<ul class="">
 			<li><a href="#" onclick="selectIndicator(this, 'pecs_admin_delta')">Pecs Admin &Delta;</a></li>
 		</ul>
-		
+
 		<div class="navheader">Deworming</div>
 		<ul class="">
 			<li><a href="#" onclick="selectIndicator(this, 'dw_1259')">12-59m</a></li>
@@ -83,7 +83,7 @@
 		<!-- END SIDEBAR MENU -->
 		<br class="cls"/>
 	</div>
-	
+
 	<div id="map" class="leaflet-container leaflet-fade-anim" tabindex="0" style="position: relative;"></div>
 </div>
 
@@ -95,13 +95,13 @@
 <script src="js/leaflet-heat.js"></script>
 <script src="js/bootstrap-slider.js"></script>
 <script src="js/app.js"></script>
-<!--<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>-->
+<!--<script src="//code.jquery.com/ui/1.10.3/jquery-ui.js"></script>-->
 <!--<script src="ui/jquery.ui.labeledslider.js"></script>-->
 
 <script>
 var slider = $("#slider"),
-	value = 0, 
-	year = 0, 
+	value = 0,
+	year = 0,
 	round = 0;
 
 slider.slider({
