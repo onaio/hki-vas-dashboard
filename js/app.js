@@ -28,6 +28,8 @@ var indicators = {};
 
 var geojson;
 
+var markerLayerGroup;
+
 // control that shows state info on hover
 var info = L.control();
 
@@ -187,17 +189,17 @@ info.update = function (props) {
 function getColor(d) {
 
     if (MYAPP.indicator.code != 'pecs_admin_delta') {
-    return d > 90 ? '#2ECC40' :
-        d > 80 ? '#FFDC00' :
-            d > 0 ? '#FF4136' :
+        return d > 90 ? '#2ECC40' :
+               d > 80 ? '#FFDC00' :
+               d > 0 ? '#FF4136' :
                 '#ccc';
-            } else {
-    
-    return d > 20 ? '#FF4136' :
-        d > 10 ? '#FFDC00' :
-            d > 0 ? '#2ECC40' :
-                '#ccc';
-            }
+            } 
+    else {
+        return d > 20 ? '#FF4136' :
+               d > 10 ? '#FFDC00' :
+               d > 0 ? '#2ECC40' :
+               '#ccc';
+    }
 };
 
 
@@ -354,7 +356,7 @@ function loadPECSJSON(options) {
     } catch (e) {}
     info.addTo(map);
 
-    var callback = function (first) {
+    var callback = function() {
         if (map.hasLayer(geojson)) {
             map.removeLayer(geojson);
         }
@@ -363,7 +365,7 @@ function loadPECSJSON(options) {
             onEachFeature: onEachFeature
         });
         map.addLayer(geojson);
-
+        displayMarkers();
     };
 
     if (MYAPP.pecs_datajson === null) {
@@ -398,6 +400,8 @@ function loadPECSJSON(options) {
                             json.features[j].properties[key + '_admin_pecs_6_59'] = parseFloat(data[i].admin_pecs_6_59);
                             json.features[j].properties[key + '_pecs_admin_delta'] = parseFloat(data[i].pecs_admin_delta);
                             json.features[j].properties[key + '_admin_nat_6_59'] = parseFloat(data[i].admin_nat_6_59);
+                            json.features[j].properties[key + '_pecs_lat'] = parseFloat(data[i].pecs_lat);
+                            json.features[j].properties[key + '_pecs_long'] = parseFloat(data[i].pecs_long);
                             json.features[j].properties[key + '_level'] = data[i].level;
                             //Stop looking through the JSON
                             break;
@@ -409,16 +413,11 @@ function loadPECSJSON(options) {
                 
                 // create JSON File
                 //createJSONFile(MYAPP.datajson);
-
-                if (callback !== null) {
-                    callback(true);
-                }
+                callback();
             });
         });
     } else {
-        if (callback !== null) {
-            callback(false);
-        }
+        callback();
     }
 
 };
@@ -426,10 +425,28 @@ function loadPECSJSON(options) {
 loadPECSJSON();
 //loadAfricaJSON();
 
+var displayMarkers = function(latlng) {
+    var markers = [],
+        lat, lng, latlng;
+    if (map.hasLayer(markerLayerGroup)) {
+        map.removeLayer(markerLayerGroup);
+    }
+    $.each(MYAPP.pecs_datajson.features, function(index, features){
+        lat = features.properties[gen_key() + '_pecs_lat']
+        lng = features.properties[gen_key() + '_pecs_long']
+        if(!isNaN(lat) && !isNaN(lng)) {
+            latlng = L.latLng(lat, lng);
+            markers.push(L.marker(latlng));
+        }
+    });
+    markerLayerGroup = L.layerGroup(markers)
+                        .addTo(map);
+
+}
 
 
-//var pointLayer = omnivore.csv('data/pecs/2013-1-CM.LT.csv')
-//.addTo(map);
+// var pointLayer = omnivore.csv('data/pecs/2013-1-CM.LT.csv')
+// .addTo(map);
 
 
 //var heat = L.heatLayer(pointLayer, {radius: 25}).addTo(map);
@@ -459,8 +476,6 @@ L.geoJson(someGeojsonFeature, {
     }
 }).addTo(map);
 */
-
-
 
 // Build Legend
 
@@ -510,9 +525,3 @@ function buildPicker() {
 
 buildLegend();
 //buildPicker();
-
-
-
-// Build Data Picker
-
-
