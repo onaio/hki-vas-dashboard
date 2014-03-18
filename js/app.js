@@ -97,7 +97,7 @@ var loadMap = function(isCountryJson) {
 
     markerLayerGroup = L.layerGroup(markersList);
     markerLayerGroup.addTo(map);
-    loadPointLayers();
+    //loadPointLayers();
 
 };
 
@@ -293,12 +293,13 @@ function zoomToFeature(e) {
 };
 
 function onEachFeature(feature, layer) {
-    var lat, lng, latlng;
+    var lat, lng, latlng, icon ;
     lat = feature.properties[gen_key() + '_pecs_lat']
     lng = feature.properties[gen_key() + '_pecs_long']
     if(!isNaN(lat) && !isNaN(lng)) {
         latlng = L.latLng(lat, lng);
-        markersList.push(L.marker(latlng));
+        icon = L.MakiMarkers.icon({icon: "pharmacy", color: "#1087bf", size: "l"});
+        markersList.push(L.marker(latlng, {icon: icon}));
     }
     layer.on({
         mouseover: highlightFeature,
