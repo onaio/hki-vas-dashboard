@@ -457,11 +457,19 @@ function loadPointLayers() {
             if(feature.properties['vita'] === "0") {
                 // color to indicate area not covered
                 color = "#fb8072";
+            } else if (feature.properties['vita'] === "88") {
+                // color green indicate area covered
+                color = "#dddddd";
             } else {
-                // color to indicate area covered
                 color = "#2ECC40";
             }
-            icon = L.MakiMarkers.icon({icon: "pharmacy", color: color, size: "s"});
+            var icon_type;
+            if (feature.properties['gender'] == '1') {
+                icon_type = 'm' 
+            } else {
+                icon_type = 'f';
+            };
+            icon = L.MakiMarkers.icon({icon: icon_type, color: color, size: "s"});
             return L.marker(latlng, {icon: icon});
         };
         layer.addTo(map)
