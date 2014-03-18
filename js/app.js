@@ -74,6 +74,8 @@ var map = new L.Map('map', {
 })
 .setView([3,12],4);
 
+
+
 var loadMap = function(isCountryJson) {
     if (map.hasLayer(geojson)) {
         map.removeLayer(geojson);
@@ -445,9 +447,11 @@ function clearPointLayers() {
         pointLayers = [];
     }
 }
+
 function loadPointLayers() {
     var key = gen_key(),
         icon,
+        icon_type,
         layer;
     clearPointLayers();
     if(key === '2013-1') {
@@ -459,11 +463,11 @@ function loadPointLayers() {
                 color = "#fb8072";
             } else if (feature.properties['vita'] === "88") {
                 // color green indicate area covered
-                color = "#dddddd";
+                color = "#AAAAAA";
             } else {
                 color = "#2ECC40";
             }
-            var icon_type;
+            
             if (feature.properties['gender'] == '1') {
                 icon_type = 'm' 
             } else {
@@ -480,6 +484,21 @@ function loadPointLayers() {
         return;
     }
 }
+
+function heatMap() {
+    var latlngs = [];
+    layer = omnivore.csv('data/pecs/CM.LT-2013-1.csv');
+
+    
+    //var latlngs = layer.getLatLngs();
+    //console.log(latlngs);
+
+
+    //var heat = L.heatLayer(latlngs, {radius: 25}).addTo(map);
+
+}
+
+heatMap();
 
 // var heat = L.heatLayer(pointLayer, {radius: 25}).addTo(map);
 
