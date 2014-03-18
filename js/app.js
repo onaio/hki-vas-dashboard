@@ -97,8 +97,6 @@ var loadMap = function(isCountryJson) {
 
     markerLayerGroup = L.layerGroup(markersList);
     markerLayerGroup.addTo(map);
-    //loadPointLayers();
-
 };
 
 MYAPP.indicator = null;
@@ -293,12 +291,12 @@ function zoomToFeature(e) {
 };
 
 function onEachFeature(feature, layer) {
-    var lat, lng, latlng, icon ;
+    var lat, lng, latlng, icon;
     lat = feature.properties[gen_key() + '_pecs_lat']
     lng = feature.properties[gen_key() + '_pecs_long']
     if(!isNaN(lat) && !isNaN(lng)) {
         latlng = L.latLng(lat, lng);
-        icon = L.MakiMarkers.icon({icon: "pharmacy", color: "#1087bf", size: "l"});
+        icon = L.MakiMarkers.icon({icon: "pharmacy", color: "#1087bf", size: "m"});
         markersList.push(L.marker(latlng, {icon: icon}));
     }
     layer.on({
@@ -425,10 +423,19 @@ function loadPECSJSON(options) {
 
 loadPECSJSON();
 //loadAfricaJSON();
-var pointLayers = []
 
-function loadPointLayers() {
-    key = gen_key();
+map.on('zoomend', function(event){
+    var zoomLevel = event.target.getZoom();
+    if(zoomLevel > 4 && pointLayers.length === 0) {
+        loadPointLayers();
+    } else if(zoomLevel <= 4){
+        clearPointLayers();
+    }
+});
+
+var pointLayers = [];
+
+function clearPointLayers() {
     if(pointLayers.length > 0) {
         for(i=0; i<pointLayers.length; i++) {
             if (map.hasLayer(pointLayers[i])) {
@@ -437,15 +444,32 @@ function loadPointLayers() {
         }
         pointLayers = [];
     }
+}
+function loadPointLayers() {
+    var key = gen_key(),
+        icon,
+        layer;
+    clearPointLayers();
     if(key === '2013-1') {
-        pointLayers.push(omnivore.csv('data/pecs/CM.LT-2013-1.csv'));
+        layer = omnivore.csv('data/pecs/CM.LT-2013-1.csv');
+        layer.options.pointToLayer = function(feature, latlng) {
+            var color = "#fb8072";
+            if(feature.properties['vita'] === "0") {
+                // color to indicate area not covered
+                color = "#fb8072";
+            } else {
+                // color to indicate area covered
+                color = "#8DD3C7";
+            }
+            icon = L.MakiMarkers.icon({icon: "pharmacy", color: color, size: "m"});
+            return L.marker(latlng, {icon: icon});
+        };
+        layer.addTo(map)
+        pointLayers.push(layer);
     } else if(key === '2013-2') {
         pointLayers.push(omnivore.csv('data/pecs/CM.LT-2013-2.csv'));
     } else {
         return;
-    }
-    for(i=0; i<pointLayers.length; i++) {
-        pointLayers[i].addTo(map);
     }
 }
 
