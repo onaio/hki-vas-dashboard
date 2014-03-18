@@ -8,7 +8,10 @@ DEPLOYMENTS = {
         'home': '/home/ubuntu/src/',
         'host_string': 'ubuntu@ona.io',
         'project': 'hki-vas-dashboard',
-        'key_filename': os.path.expanduser('~/.ssh/ona.pem'),
+        'key_filename': [
+            os.path.expanduser('~/.ssh/ona.pem'),
+            os.path.expanduser('~/.ssh/id_rsa'),
+        ],
     },
 }
 
@@ -16,10 +19,16 @@ CONFIG_PATH_DEPRECATED = 'formhub/local_settings.py'
 
 
 def check_key_filename(deployment_name):
-    if 'key_filename' in DEPLOYMENTS[deployment_name] and \
-       not os.path.exists(DEPLOYMENTS[deployment_name]['key_filename']):
-        exit_with_error("Cannot find required permissions file: %s" %
-                        DEPLOYMENTS[deployment_name]['key_filename'])
+    if 'key_filename' in DEPLOYMENTS[deployment_name]:
+        at_least_one_path = False
+
+        for path in DEPLOYMENTS[deployment_name]['key_filename']:
+            if os.path.exists(path):
+                at_least_one_path = True
+
+        if not at_least_one_path:
+            exit_with_error("Cannot find required permissions file: %s" %
+                            DEPLOYMENTS[deployment_name]['key_filename'])
 
 
 def exit_with_error(message):
