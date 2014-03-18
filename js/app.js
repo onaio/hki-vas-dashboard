@@ -459,9 +459,9 @@ function loadPointLayers() {
                 color = "#fb8072";
             } else {
                 // color to indicate area covered
-                color = "#8DD3C7";
+                color = "#2ECC40";
             }
-            icon = L.MakiMarkers.icon({icon: "pharmacy", color: color, size: "m"});
+            icon = L.MakiMarkers.icon({icon: "pharmacy", color: color, size: "s"});
             return L.marker(latlng, {icon: icon});
         };
         layer.addTo(map)
