@@ -1,41 +1,27 @@
 var MYAPP = {};
 
-var VAS_INDICATORS = {
-    vas_6_11: 'VAS (6-11m)',
-    vas_12_59: 'VAS (12-59m)',
-    vas_6_59: 'VAS (6-59m)',
-    vas_6_59_m: 'VAS (6-59m) Male',
-    vas_6_59_f: 'VAS (6-59m) Female',
-    admin_pecs_6_59: 'Administrative Catchment (6-59m)',
-    admin_nat_6_59: 'Administrative 6-59m',
-    pecs_admin_delta: 'PECs Administrative &Delta;',
-    dw_1259: 'Deworming (12-59m)'
-};
-
 var setupOptions = {
     year: '2012',
     round: 2,
     code: 'vas_6_59',
-    name: VAS_INDICATORS['vas_6_59']
+    name: 'VAS (6-59m)'
 };
 
+MYAPP.indicator = null;
+MYAPP.datajson = null;
+MYAPP.countryjson = null;
 
-var years = [2011, 2012, 2013];
-
+var years = [2011,2012,2013];
 var rounds = [1,2];
 
 var indicators = {};
 
-var geojson;
 
-var markersList = []
-var markerLayerGroup;
-
-// control that shows state info on hover
-var info = L.control();
-
-// Map legend
-var legend = L.control({position: 'bottomright'});
+var gen_key = function() {
+    var k;
+    k = MYAPP.indicator.year + '-' + MYAPP.indicator.round;
+    return k;
+};
 
 var colorPalette = ['#8DD3C7', '#FB8072', '#FFFFB3', '#BEBADA', '#80B1D3', '#FDB462', '#B3DE69', '#FCCDE5', '#D9D9D9',
     '#BC80BD', '#CCEBC5', '#FFED6F'];
@@ -49,95 +35,13 @@ var circleStyle = {
     opacity: 0.5
 };
 
-
-var gen_key = function() {
-    var k;
-    k = MYAPP.indicator.year + '-' + MYAPP.indicator.round;
-    return k;
-};
-
-var map = new L.Map('map', {
-    minZoom: 0,
-    maxZoom: 18,
-    zoomControl: false,
-    layers: [
-        L.tileLayer('https://{s}.tiles.mapbox.com/v3/ona.sr6kcsor/{z}/{x}/{y}.png', {
-        maxZoom: 9,
-        minZoom: 0,
-        attribution: '<a href="http://www.mapbox.com/about/maps/" target="_blank">Terms &amp; Feedback</a>'
-    }),
-        L.tileLayer('https://{s}.tiles.mapbox.com/v3/ona.hbgm1c4d/{z}/{x}/{y}.png', {
-        maxZoom: 18,
-        minZoom: 10,
-        attribution: '<a href="http://www.mapbox.com/about/maps/" target="_blank">Terms &amp; Feedback</a>'
-    })]
-})
-.setView([3,12],4);
-
-var loadMap = function(isCountryJson) {
-    if (map.hasLayer(geojson)) {
-        map.removeLayer(geojson);
-    }
-    if (map.hasLayer(markerLayerGroup)) {
-        markersList = [];
-        map.removeLayer(markerLayerGroup);
-    }
-    if(isCountryJson) {
-        geojson = L.geoJson(MYAPP.country_datajson, {
-            style: style,
-            onEachFeature: onEachFeature
-        });
-    } else {
-        geojson = L.geoJson(MYAPP.pecs_datajson, {
-            style: style,
-            onEachFeature: onEachFeature
-        });
-    }
-    map.addLayer(geojson);
-
-    markerLayerGroup = L.layerGroup(markersList);
-    //markerLayerGroup.addTo(map);
-    loadPointLayers();
-
-};
-
-MYAPP.indicator = null;
-MYAPP.country_datajson = null;
-MYAPP.pecs_datajson = null;
-MYAPP.countryjson = null;
-
-
-
-function setReportParameters(year,round) {
+function setYear(year,round) {
     MYAPP.indicator.year = year;
     MYAPP.indicator.round = round;
     var options = MYAPP.indicator;
     options.year = year;
-    loadJSONData();
+    loadAfricaJSON(options);
 };
-
-function selectIndicator(selector, indicator) {
-    if (indicator === undefined || indicator === null) {
-        indicator = setupOptions.code;
-    }
-    MYAPP.indicator.code = indicator;
-    MYAPP.indicator.name = VAS_INDICATORS[indicator];
-
-    loadJSONData();
-    $('#indicator-list').find('ul li.selected').removeClass('selected');
-    $(selector).parent().addClass('selected');
-
-    return MYAPP.indicator;
-};
-
-function loadJSONData(){
-    if (MYAPP.indicator.code === 'admin_nat_6_59') {
-        loadCountryJSON(MYAPP.indicator);
-    } else {
-        loadPECSJSON(MYAPP.indicator);
-    }
-    buildLegend();
-}
 
 function createJSONFile(json) {
     var geojsonfile = JSON.stringify(json);
@@ -153,6 +57,10 @@ function createJSONFile(json) {
 
 };
 
+var hkiTiles = L.tileLayer('https://{s}.tiles.mapbox.com/v3/ona.swgn9udi/{z}/{x}/{y}.png', {
+    attribution: '<a href="http://www.mapbox.com/about/maps/" target="_blank">Terms &amp; Feedback</a>',
+});
+
 /*
 var map = L.map('map', 
     {
@@ -167,8 +75,29 @@ var map = L.map('map',
 
 //ona.hg740ono
 
+var map = new L.Map('map', {
+minZoom: 0,
+maxZoom: 18,
+zoomControl: false,
+layers: [
+    L.tileLayer('https://{s}.tiles.mapbox.com/v3/ona.vdv7k3xr/{z}/{x}/{y}.png', {
+    maxZoom: 9,
+    minZoom: 0,
+    attribution: '<a href="http://www.mapbox.com/about/maps/" target="_blank">Terms &amp; Feedback</a>'
+}),
+    L.tileLayer('https://{s}.tiles.mapbox.com/v3/ona.hbgm1c4d/{z}/{x}/{y}.png', {
+    maxZoom: 18,
+    minZoom: 10,
+    attribution: '<a href="http://www.mapbox.com/about/maps/" target="_blank">Terms &amp; Feedback</a>'
+})]
+})
+.setView([3,12],4);
+
 
 new L.Control.Zoom({ position: 'bottomleft' }).addTo(map);
+
+// control that shows state info on hover
+var info = L.control();
 
 info.onAdd = function (map) {
     this._div = L.DomUtil.create('div', 'info');
@@ -177,25 +106,14 @@ info.onAdd = function (map) {
 };
 
 info.update = function (props) {
-    var level_note,
-        indicator_desc = [],
-        key = gen_key();
-
-    if (typeof props !== "undefined") {
-        if (typeof props[key + '_' + MYAPP.indicator.code] === "undefined") {
-            indicator_desc = 'Not Available';
+    var level_note;
+    var val;
+    var key = gen_key();
+    if (typeof props != "undefined") {
+        if (typeof props[key + '_' +MYAPP.indicator.code] === 'undefined') {
+            val = 'Not Available';
         } else {
-            $.each(VAS_INDICATORS, function(code, desc){
-                if(MYAPP.indicator.code !== code) {
-                    if(props[key + '_' +code] !== undefined) {
-                        indicator_desc.push(desc + ': ' + props[key + '_' +code] + "%");
-                    }
-                } else {
-                    indicator_desc.push('<strong>' + desc + ': ' + props[key + '_' + code] + "%</strong>");
-                }
-            });
-            indicator_desc = indicator_desc.slice(0, 5);
-            indicator_desc = indicator_desc.join('<br/>');
+            val = props[key + '_' +MYAPP.indicator.code] + "%";
         }
         if (props.level == 'catchment') {
             level_note = '(Catchment)';
@@ -203,10 +121,10 @@ info.update = function (props) {
             level_note = '';
         }
     }
-    this._div.innerHTML = '<h4>' + MYAPP.indicator.year 
-        + ' (Round ' + MYAPP.indicator.round + ')</h4>'
+    this._div.innerHTML = '<h4>' + MYAPP.indicator.name + '</h4>'
+        + '<h4>' + MYAPP.indicator.year + ' (Round ' + MYAPP.indicator.round + ')</h4>'
         + (props ?
-        '<b>' + props.name + ' ' + level_note + '</b><br />' + indicator_desc
+        '<b>' + props.name + ' ' + level_note + '</b><br />' + val
         : 'Hover over an area');
 };
 
@@ -214,22 +132,11 @@ info.update = function (props) {
 // set country colors
 
 function getColor(d) {
-
-    if (MYAPP.indicator.code != 'pecs_admin_delta') {
-        return d > 90 ? '#2ECC40' :
-               d > 80 ? '#FFDC00' :
-               d > 0 ? '#FF4136' :
+    return d > 90 ? '#2ECC40' :
+        d > 80 ? '#FFDC00' :
+            d > 0 ? '#FF4136' :
                 '#ccc';
-            } 
-    else {
-        return d > 20 ? '#FF4136' :
-               d > 10 ? '#FFDC00' :
-               d > 0 ? '#2ECC40' :
-               '#ccc';
-    }
-};
-
-
+}
 
 // style country
 
@@ -280,8 +187,12 @@ function highlightFeature(e) {
     if (!L.Browser.ie && !L.Browser.opera) {
         layer.bringToFront();
     }
+
     info.update(layer.feature.properties);
 };
+
+
+var geojson;
 
 function resetHighlight(e) {
     geojson.resetStyle(e.target);
@@ -293,13 +204,6 @@ function zoomToFeature(e) {
 };
 
 function onEachFeature(feature, layer) {
-    var lat, lng, latlng;
-    lat = feature.properties[gen_key() + '_pecs_lat']
-    lng = feature.properties[gen_key() + '_pecs_long']
-    if(!isNaN(lat) && !isNaN(lng)) {
-        latlng = L.latLng(lat, lng);
-        markersList.push(L.marker(latlng));
-    }
     layer.on({
         mouseover: highlightFeature,
         mouseout: resetHighlight,
@@ -307,10 +211,11 @@ function onEachFeature(feature, layer) {
     });
 };
 
-function loadCountryJSON(options) {
-        if (options === undefined || options === null) {
+function loadAfricaJSON(options) {
+    if (options === undefined || options === null) {
         options = setupOptions;
     }
+
 
     MYAPP.indicator = options;
 
@@ -319,7 +224,21 @@ function loadCountryJSON(options) {
     } catch (e) {}
     info.addTo(map);
 
-    if (MYAPP.country_datajson === null) {
+    var callback = function (first) {
+        if (map.hasLayer(geojson)) {
+            map.removeLayer(geojson);
+        }
+        geojson = L.geoJson(MYAPP.datajson, {
+            style: style,
+            onEachFeature: onEachFeature
+        });
+        map.addLayer(geojson);
+
+    };
+
+
+
+    if (MYAPP.datajson === null) {
         d3.csv("data/hki-vas-data.csv", function (data) {
             var allyears;
             d3.json("data/africa.json", function (json) {
@@ -336,7 +255,9 @@ function loadCountryJSON(options) {
                         var jsonCountry = json.features[j].properties.iso_a2;
                         if (dataCountry == jsonCountry) {
                             //Copy the data value into the JSON
-                            json.features[j].properties[key + '_admin_nat_6_59'] = parseFloat(data[i].admin_nat_6_59);
+                            json.features[j].properties[key + '_pecs'] = parseFloat(data[i].pecs);
+                            json.features[j].properties[key + '_admin_coverage'] = parseFloat(data[i].admin_coverage);
+                            json.features[j].properties[key + '_pecs_admin_delta'] = parseFloat(data[i].pecs_admin_delta);
                             json.features[j].properties[key + '_level'] = data[i].level;
                             //Stop looking through the JSON
                             break;
@@ -344,22 +265,29 @@ function loadCountryJSON(options) {
                     }
                 }
 
-                MYAPP.country_datajson = json;
+                MYAPP.datajson = json;
 
-                loadMap(true);
+                if (callback !== null) {
+                    callback(true);
+                }
             });
         });
     } else {
-        loadMap(true);
+        if (callback !== null) {
+            callback(false);
+        }
     }
 
 };
+
+
 
 
 function loadPECSJSON(options) {
     if (options === undefined || options === null) {
         options = setupOptions;
     }
+
 
     MYAPP.indicator = options;
 
@@ -368,7 +296,19 @@ function loadPECSJSON(options) {
     } catch (e) {}
     info.addTo(map);
 
-    if (MYAPP.pecs_datajson === null) {
+    var callback = function (first) {
+        if (map.hasLayer(geojson)) {
+            map.removeLayer(geojson);
+        }
+        geojson = L.geoJson(MYAPP.datajson, {
+            style: style,
+            onEachFeature: onEachFeature
+        });
+        map.addLayer(geojson);
+
+    };
+
+    if (MYAPP.datajson === null) {
 
         d3.csv("data/hki-vas-data.csv", function (data) {
             var allyears;
@@ -396,12 +336,9 @@ function loadPECSJSON(options) {
                             json.features[j].properties[key + '_vas_6_59'] = parseFloat(data[i].vas_6_59);
                             json.features[j].properties[key + '_vas_6_59_f'] = parseFloat(data[i].vas_6_59_f);
                             json.features[j].properties[key + '_vas_6_59_m'] = parseFloat(data[i].vas_6_59_m);
-                            json.features[j].properties[key + '_dw_1259'] = parseFloat(data[i].vas_6_59_m);
                             json.features[j].properties[key + '_admin_pecs_6_59'] = parseFloat(data[i].admin_pecs_6_59);
                             json.features[j].properties[key + '_pecs_admin_delta'] = parseFloat(data[i].pecs_admin_delta);
                             json.features[j].properties[key + '_admin_nat_6_59'] = parseFloat(data[i].admin_nat_6_59);
-                            json.features[j].properties[key + '_pecs_lat'] = parseFloat(data[i].pecs_lat);
-                            json.features[j].properties[key + '_pecs_long'] = parseFloat(data[i].pecs_long);
                             json.features[j].properties[key + '_level'] = data[i].level;
                             //Stop looking through the JSON
                             break;
@@ -409,46 +346,34 @@ function loadPECSJSON(options) {
                     }
                 }
                
-                MYAPP.pecs_datajson = json;
+                MYAPP.datajson = json;
                 
                 // create JSON File
                 //createJSONFile(MYAPP.datajson);
-                loadMap(false);
+
+                if (callback !== null) {
+                    callback(true);
+                }
             });
         });
     } else {
-        loadMap(false);
+        if (callback !== null) {
+            callback(false);
+        }
     }
 
 };
 
 loadPECSJSON();
 //loadAfricaJSON();
-var pointLayers = []
 
-function loadPointLayers() {
-    key = gen_key();
-    if(pointLayers.length > 0) {
-        for(i=0; i<pointLayers.length; i++) {
-            if (map.hasLayer(pointLayers[i])) {
-                map.removeLayer(pointLayers[i]);
-            }
-        }
-        pointLayers = [];
-    }
-    if(key === '2013-1') {
-        pointLayers.push(omnivore.csv('data/pecs/CM.LT-2013-1.csv'));
-    } else if(key === '2013-2') {
-        pointLayers.push(omnivore.csv('data/pecs/CM.LT-2013-2.csv'));
-    } else {
-        return;
-    }
-    for(i=0; i<pointLayers.length; i++) {
-        pointLayers[i].addTo(map);
-    }
-}
 
-// var heat = L.heatLayer(pointLayer, {radius: 25}).addTo(map);
+
+//var pointLayer = omnivore.csv('data/pecs/2013-1-CM.LT.csv')
+//.addTo(map);
+
+
+//var heat = L.heatLayer(pointLayer, {radius: 25}).addTo(map);
 
 //pointLayer.addTo(map);
 
@@ -476,25 +401,22 @@ L.geoJson(someGeojsonFeature, {
 }).addTo(map);
 */
 
+
+
 // Build Legend
 
 function buildLegend () {
-    if(legend.getContainer() !== undefined) {
-        legend.removeFrom(map);    
-    }
-    
+    var legend = L.control({position: 'bottomright'});
+
     legend.onAdd = function (map) {
+
         var div = L.DomUtil.create('div', 'info legend'),
             labels = [];
-        if (MYAPP.indicator.code != 'pecs_admin_delta') {
-            labels.push('<i style="background:#2ECC40"></i> 90&ndash;100%');
-            labels.push('<i style="background:#FFDC00"></i> 80&ndash;89%');
-            labels.push('<i style="background:#FF4136"></i> < 80%');
-        } else {
-            labels.push('<i style="background:#FF4136"></i> 20&ndash;100%');
-            labels.push('<i style="background:#FFDC00"></i> 10&ndash;20%');
-            labels.push('<i style="background:#2ECC40"></i> 0&ndash;10%');
-        }
+
+        labels.push('<i style="background:#2ECC40"></i> 90&ndash;100%');
+        labels.push('<i style="background:#FFDC00"></i> 80&ndash;89%');
+        labels.push('<i style="background:#FF4136"></i> < 80%');
+
         div.innerHTML = labels.join('<br>');
         return div;
     };
@@ -511,7 +433,7 @@ function buildPicker() {
             labels = [];
         for (y = 0; y < years.length; y++) {
             for (r = 0; r < rounds.length; r++) {
-                labels.push('<a href="#" onclick="setReportParameters(' + years[y] + ',' + rounds[r] + ');return false;">' + years[y] + ' Round ' + rounds[r] + '</a>');
+                labels.push('<a href="#" onclick="setYear(' + years[y] + ',' + rounds[r] + ');return false;">' + years[y] + ' Round ' + rounds[r] + '</a>');
             }
         }
         div.innerHTML = labels.join('<br>');
@@ -524,3 +446,9 @@ function buildPicker() {
 
 buildLegend();
 //buildPicker();
+
+
+
+// Build Data Picker
+
+
