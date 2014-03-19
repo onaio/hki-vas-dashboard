@@ -34,6 +34,8 @@ var markerLayerGroup;
 // control that shows state info on hover
 var info = L.control();
 
+var layer_in_focus
+
 // Map legend
 var legend = L.control({position: 'bottomright'});
 
@@ -135,6 +137,7 @@ function loadJSONData(){
         loadCountryJSON(MYAPP.indicator);
     } else {
         loadPECSJSON(MYAPP.indicator);
+        loadPointLayers();
     }
     buildLegend();
 }
@@ -293,13 +296,25 @@ function zoomToFeature(e) {
 };
 
 function onEachFeature(feature, layer) {
-    var lat, lng, latlng, icon;
+    var lat, 
+        lng, 
+        latlng,
+        icon,
+        marker;
     lat = feature.properties[gen_key() + '_pecs_lat']
     lng = feature.properties[gen_key() + '_pecs_long']
     if(!isNaN(lat) && !isNaN(lng)) {
         latlng = L.latLng(lat, lng);
         icon = L.MakiMarkers.icon({icon: "pharmacy", color: "#1087bf", size: "m"});
-        markersList.push(L.marker(latlng, {icon: icon}));
+        marker = L.marker(latlng, {icon: icon});
+        marker.layer = layer;
+        marker.on('click', function(e){
+            layer = e.target.layer;
+            map.fitBounds(layer.getBounds());
+            layer_in_focus = layer;
+            loadPointLayers();
+        });
+        markersList.push(marker);
     }
     layer.on({
         mouseover: highlightFeature,
@@ -428,9 +443,7 @@ loadPECSJSON();
 
 map.on('zoomend', function(event){
     var zoomLevel = event.target.getZoom();
-    if(zoomLevel > 4 && pointLayers.length === 0) {
-        loadPointLayers();
-    } else if(zoomLevel <= 4){
+    if(zoomLevel < 7 && pointLayers.length !== 0) {
         clearPointLayers();
     }
 });
@@ -449,13 +462,20 @@ function clearPointLayers() {
 }
 
 function loadPointLayers() {
-    var key = gen_key(),
+    var period = gen_key(),
         icon,
         icon_type,
+        code_hasc,
+        csv_file,
         layer;
     clearPointLayers();
-    if(key === '2013-1') {
-        layer = omnivore.csv('data/pecs/CM.LT-2013-1.csv');
+    if(layer_in_focus === null) {
+        return;
+    }
+    code_hasc = layer_in_focus.feature.properties['code_hasc'];
+    csv_file = 'data/pecs/' + code_hasc + '-' + period + '.csv';
+    layer = omnivore.csv(csv_file);
+    if(layer) {
         layer.options.pointToLayer = function(feature, latlng) {
             var color = "#fb8072";
             if(feature.properties['vita'] === "0") {
@@ -478,8 +498,6 @@ function loadPointLayers() {
         };
         layer.addTo(map)
         pointLayers.push(layer);
-    } else if(key === '2013-2') {
-        pointLayers.push(omnivore.csv('data/pecs/CM.LT-2013-2.csv'));
     } else {
         return;
     }
@@ -498,7 +516,7 @@ function heatMap() {
 
 }
 
-heatMap();
+// heatMap();
 
 // var heat = L.heatLayer(pointLayer, {radius: 25}).addTo(map);
 
