@@ -137,7 +137,9 @@ function loadJSONData(){
         loadCountryJSON(MYAPP.indicator);
     } else {
         loadPECSJSON(MYAPP.indicator);
-        loadPointLayers();
+        if(layer_in_focus !== null) {
+            loadPointLayers();;
+        }
     }
     buildLegend();
 }
