@@ -19,72 +19,74 @@
 <script src='//api.tiles.mapbox.com/mapbox.js/plugins/leaflet-omnivore/v0.0.0/leaflet-omnivore.min.js'></script>
 </head>
 <body>
-
-<div class="header navbar navbar-fixed-top">
-	<!-- BEGIN TOP NAVIGATION BAR -->
-	<div class="header-inner">
-		<div class="col-sm-5"><br/>
-			<span class="head-title"><strong>HKI Vitamin A Supplementation (VAS)</strong> Coverage</span>
-		</div>
-		<div class="col-sm-5">
-			<div class="slidebox"><br/>
-				<input id="slider" data-slider-id='ex1Slider' type="text" data-slider-min="2011.5" data-slider-max="2013.5" data-slider-step="0.5" data-slider-value="2012"/>
-				<span id="updateRound"></span>
-				<br/>
-				<div class="slider-labels">
-					<span>2011 R2</span>
-					<span>2012 R1</span>
-					<span>2012 R2</span>
-					<span>2013 R1</span>
-					<span>2013 R2</span>
+<div id="wrapper">
+	<div class="header navbar navbar-fixed-top">
+		<!-- BEGIN TOP NAVIGATION BAR -->
+		<div class="header-inner">
+			<div class="col-sm-5"><br/>
+				<span class="head-title"><strong>HKI Vitamin A Supplementation (VAS)</strong> Coverage</span>
+			</div>
+			<div class="col-sm-5">
+				<div class="slidebox"><br/>
+					<input id="slider" data-slider-id='ex1Slider' type="text" data-slider-min="2011.5" data-slider-max="2013.5" data-slider-step="0.5" data-slider-value="2012"/>
+					<span id="updateRound"></span>
+					<br/>
+					<div class="slider-labels">
+						<span>2011 R2</span>
+						<span>2012 R1</span>
+						<span>2012 R2</span>
+						<span>2013 R1</span>
+						<span>2013 R2</span>
+					</div>
 				</div>
 			</div>
+
+			<div class="col-sm-2 logo-holder">
+				<!-- BEGIN LOGO -->
+				<a class="navbar-brand" href="index.html">
+					<img src="img/hki-logotype.png" alt="logo" class="img-responsive">
+				</a>
+				<!-- END LOGO -->
+			</div>
 		</div>
-
-		<div class="col-sm-2 logo-holder">
-			<!-- BEGIN LOGO -->
-			<a class="navbar-brand" href="index.html">
-				<img src="img/hki-logotype.png" alt="logo" class="img-responsive">
-			</a>
-			<!-- END LOGO -->
-		</div>
-	</div>
-<!-- END TOP NAVIGATION BAR -->
-<br class="cls"/>
-</div>
-
-<!--<div id="content"></div>-->
-<div class="page-container">
-	<div class="page-sidebar container" id="indicator-list">
-		<!-- BEGIN SIDEBAR MENU -->
-		<div class="navheader">VAS</div>
-		<ul>
-			<li class="selected"><a href="#" onclick="selectIndicator(this, 'vas_6_59')">6-59m</a></li>
-			<li><a href="#" onclick="selectIndicator(this, 'vas_6_11')">6-11m</a></li>
-			<li><a href="#" onclick="selectIndicator(this, 'vas_12_59')">12-59m</a></li>
-			<li><a href="#" onclick="selectIndicator(this, 'vas_6_59_f')">6-59m Female</a></li>
-			<li><a href="#" onclick="selectIndicator(this, 'vas_6_59_m')">6-59m Male</a></li>
-		</ul>
-		<div class="navheader">Administrative</div>
-		<ul class="">
-			<li><a href="#" onclick="selectIndicator(this, 'admin_pecs_6_59')">Catchment (6-59m)</a></li>
-			<li><a href="#" onclick="selectIndicator(this, 'admin_nat_6_59')">National 6-59m</a></li>
-		</ul>
-
-		<div class="navheader">Difference</div>
-		<ul class="">
-			<li><a href="#" onclick="selectIndicator(this, 'pecs_admin_delta')">Pecs Admin &Delta;</a></li>
-		</ul>
-
-		<div class="navheader">Deworming</div>
-		<ul class="">
-			<li><a href="#" onclick="selectIndicator(this, 'dw_1259')">12-59m</a></li>
-		</ul><br/>
-		<!-- END SIDEBAR MENU -->
-		<br class="cls"/>
+	<!-- END TOP NAVIGATION BAR -->
+	<br class="cls"/>
 	</div>
 
-	<div id="map" class="leaflet-container leaflet-fade-anim" tabindex="0" style="position: relative;"></div>
+	<!--<div id="content"></div>-->
+	<div class="page-container">
+		<div class="page-sidebar container" id="indicator-list">
+			<!-- BEGIN SIDEBAR MENU -->
+			<div class="navheader">VAS</div>
+			<ul>
+				<li class="selected"><a href="#" onclick="selectIndicator(this, 'vas_6_59')">6-59m</a></li>
+				<li><a href="#" onclick="selectIndicator(this, 'vas_6_11')">6-11m</a></li>
+				<li><a href="#" onclick="selectIndicator(this, 'vas_12_59')">12-59m</a></li>
+				<li><a href="#" onclick="selectIndicator(this, 'vas_6_59_f')">6-59m Female</a></li>
+				<li><a href="#" onclick="selectIndicator(this, 'vas_6_59_m')">6-59m Male</a></li>
+			</ul>
+			<div class="navheader">Administrative</div>
+			<ul class="">
+				<li><a href="#" onclick="selectIndicator(this, 'admin_pecs_6_59')">Catchment (6-59m)</a></li>
+				<li><a href="#" onclick="selectIndicator(this, 'admin_nat_6_59')">National 6-59m</a></li>
+			</ul>
+
+			<div class="navheader">Difference</div>
+			<ul class="">
+				<li><a href="#" onclick="selectIndicator(this, 'pecs_admin_delta')">Pecs Admin &Delta;</a></li>
+			</ul>
+
+			<div class="navheader">Deworming</div>
+			<ul class="">
+				<li><a href="#" onclick="selectIndicator(this, 'dw_1259')">12-59m</a></li>
+			</ul><br/>
+			<!-- END SIDEBAR MENU -->
+			<br class="cls"/>
+		</div>
+
+		<div id="map" class="absolutes leaflet-container leaflet-fade-anim" tabindex="0" style="position:elative;"></div>
+	<br class="cls"/>
+	</div>
 </div>
 
 <script src="js/d3.min.js"></script>
