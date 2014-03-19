@@ -19,14 +19,17 @@ DEPLOYMENTS = {
 def check_key_filename(deployment_name):
     if 'key_filename' in DEPLOYMENTS[deployment_name]:
         at_least_one_path = False
-
+        key_files = []
         for path in DEPLOYMENTS[deployment_name]['key_filename']:
             if os.path.exists(path):
-                at_least_one_path = True
+                key_files.append(path)
 
-        if not at_least_one_path:
+
+        if not key_files.__len__():
             exit_with_error("Cannot find required permissions file: %s" %
                             DEPLOYMENTS[deployment_name]['key_filename'])
+        else:
+            return key_files
 
 
 def exit_with_error(message):
@@ -42,7 +45,8 @@ def setup_env(deployment_name):
 
     env.update(deployment)
 
-    check_key_filename(deployment_name)
+    key_files = check_key_filename(deployment_name)
+    env.update({'key_filename': key_files})
 
     env.code_src = os.path.join(env.home, env.project)
 
