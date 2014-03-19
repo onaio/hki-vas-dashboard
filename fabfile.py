@@ -15,8 +15,6 @@ DEPLOYMENTS = {
     },
 }
 
-CONFIG_PATH_DEPRECATED = 'formhub/local_settings.py'
-
 
 def check_key_filename(deployment_name):
     if 'key_filename' in DEPLOYMENTS[deployment_name]:
