@@ -34,6 +34,8 @@ var markerLayerGroup;
 // control that shows state info on hover
 var info = L.control();
 
+var layer_in_focus
+
 // Map legend
 var legend = L.control({position: 'bottomright'});
 
@@ -74,6 +76,8 @@ var map = new L.Map('map', {
 })
 .setView([3,12],4);
 
+
+
 var loadMap = function(isCountryJson) {
     if (map.hasLayer(geojson)) {
         map.removeLayer(geojson);
@@ -96,9 +100,7 @@ var loadMap = function(isCountryJson) {
     map.addLayer(geojson);
 
     markerLayerGroup = L.layerGroup(markersList);
-    //markerLayerGroup.addTo(map);
-    loadPointLayers();
-
+    markerLayerGroup.addTo(map);
 };
 
 MYAPP.indicator = null;
@@ -135,6 +137,9 @@ function loadJSONData(){
         loadCountryJSON(MYAPP.indicator);
     } else {
         loadPECSJSON(MYAPP.indicator);
+        if(layer_in_focus !== null) {
+            loadPointLayers();;
+        }
     }
     buildLegend();
 }
@@ -293,12 +298,25 @@ function zoomToFeature(e) {
 };
 
 function onEachFeature(feature, layer) {
-    var lat, lng, latlng;
+    var lat, 
+        lng, 
+        latlng,
+        icon,
+        marker;
     lat = feature.properties[gen_key() + '_pecs_lat']
     lng = feature.properties[gen_key() + '_pecs_long']
     if(!isNaN(lat) && !isNaN(lng)) {
         latlng = L.latLng(lat, lng);
-        markersList.push(L.marker(latlng));
+        icon = L.MakiMarkers.icon({icon: "pharmacy", color: "#1087bf", size: "m"});
+        marker = L.marker(latlng, {icon: icon});
+        marker.layer = layer;
+        marker.on('click', function(e){
+            layer = e.target.layer;
+            map.fitBounds(layer.getBounds());
+            layer_in_focus = layer;
+            loadPointLayers();
+        });
+        markersList.push(marker);
     }
     layer.on({
         mouseover: highlightFeature,
@@ -424,10 +442,17 @@ function loadPECSJSON(options) {
 
 loadPECSJSON();
 //loadAfricaJSON();
-var pointLayers = []
 
-function loadPointLayers() {
-    key = gen_key();
+map.on('zoomend', function(event){
+    var zoomLevel = event.target.getZoom();
+    if(zoomLevel < 7 && pointLayers.length !== 0) {
+        clearPointLayers();
+    }
+});
+
+var pointLayers = [];
+
+function clearPointLayers() {
     if(pointLayers.length > 0) {
         for(i=0; i<pointLayers.length; i++) {
             if (map.hasLayer(pointLayers[i])) {
@@ -436,17 +461,64 @@ function loadPointLayers() {
         }
         pointLayers = [];
     }
-    if(key === '2013-1') {
-        pointLayers.push(omnivore.csv('data/pecs/CM.LT-2013-1.csv'));
-    } else if(key === '2013-2') {
-        pointLayers.push(omnivore.csv('data/pecs/CM.LT-2013-2.csv'));
+}
+
+function loadPointLayers() {
+    var period = gen_key(),
+        icon,
+        icon_type,
+        code_hasc,
+        csv_file,
+        layer;
+    clearPointLayers();
+    if(layer_in_focus === null) {
+        return;
+    }
+    code_hasc = layer_in_focus.feature.properties['code_hasc'];
+    csv_file = 'data/pecs/' + code_hasc + '-' + period + '.csv';
+    layer = omnivore.csv(csv_file);
+    if(layer) {
+        layer.options.pointToLayer = function(feature, latlng) {
+            var color = "#fb8072";
+            if(feature.properties['vita'] === "0") {
+                // color to indicate area not covered
+                color = "#fb8072";
+            } else if (feature.properties['vita'] === "88") {
+                // color green indicate area covered
+                color = "#AAAAAA";
+            } else {
+                color = "#2ECC40";
+            }
+            
+            if (feature.properties['gender'] == '1') {
+                icon_type = 'm' 
+            } else {
+                icon_type = 'f';
+            };
+            icon = L.MakiMarkers.icon({icon: icon_type, color: color, size: "s"});
+            return L.marker(latlng, {icon: icon});
+        };
+        layer.addTo(map)
+        pointLayers.push(layer);
     } else {
         return;
     }
-    for(i=0; i<pointLayers.length; i++) {
-        pointLayers[i].addTo(map);
-    }
 }
+
+function heatMap() {
+    var latlngs = [];
+    layer = omnivore.csv('data/pecs/CM.LT-2013-1.csv');
+
+    
+    //var latlngs = layer.getLatLngs();
+    //console.log(latlngs);
+
+
+    //var heat = L.heatLayer(latlngs, {radius: 25}).addTo(map);
+
+}
+
+// heatMap();
 
 // var heat = L.heatLayer(pointLayer, {radius: 25}).addTo(map);
 
