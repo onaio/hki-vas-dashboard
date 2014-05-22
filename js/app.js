@@ -137,8 +137,13 @@ function loadJSONData(){
         loadCountryJSON(MYAPP.indicator);
     } else {
         loadPECSJSON(MYAPP.indicator);
-        if(layer_in_focus !== null) {
-            loadPointLayers();;
+        if(layer_in_focus !== null || layer_in_focus === undefined) {
+            var zoomLevel = map.getZoom();
+            if(zoomLevel < 7) {
+                clearPointLayers();
+            } else {
+                loadPointLayers();
+            }
         }
     }
     buildLegend();
@@ -445,7 +450,7 @@ loadPECSJSON();
 
 map.on('zoomend', function(event){
     var zoomLevel = event.target.getZoom();
-    if(zoomLevel < 7 && pointLayers.length !== 0) {
+    if(zoomLevel < 7) {
         clearPointLayers();
     }
 });
@@ -471,7 +476,7 @@ function loadPointLayers() {
         csv_file,
         layer;
     clearPointLayers();
-    if(layer_in_focus === null) {
+    if(layer_in_focus === null || layer_in_focus === undefined) {
         return;
     }
     code_hasc = layer_in_focus.feature.properties['code_hasc'];
