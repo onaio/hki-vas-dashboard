@@ -151,7 +151,7 @@ function loadJSONData(){
 
 function createJSONFile(json) {
     var geojsonfile = JSON.stringify(json);
-  
+
     var blob = new Blob([geojsonfile], {type: "application/json"});
     var url  = URL.createObjectURL(blob);
 
@@ -164,7 +164,7 @@ function createJSONFile(json) {
 };
 
 /*
-var map = L.map('map', 
+var map = L.map('map',
     {
         minZoom: '3',
         maxZoom: '17'
@@ -196,7 +196,9 @@ info.update = function (props) {
             indicator_desc = 'Not Available';
         } else {
             $.each(VAS_INDICATORS, function(code, desc){
+
                 if(MYAPP.indicator.code !== code) {
+
                     if(props[key + '_' +code] !== undefined) {
                         indicator_desc.push(desc + ': ' + props[key + '_' +code] + "%");
                     }
@@ -204,7 +206,8 @@ info.update = function (props) {
                     indicator_desc.push('<strong>' + desc + ': ' + props[key + '_' + code] + "%</strong>");
                 }
             });
-            indicator_desc = indicator_desc.slice(0, 5);
+
+            //indicator_desc = indicator_desc.slice(0, 5);
             indicator_desc = indicator_desc.join('<br/>');
         }
         if (props.level == 'catchment') {
@@ -213,7 +216,7 @@ info.update = function (props) {
             level_note = '';
         }
     }
-    this._div.innerHTML = '<h4>' + MYAPP.indicator.year 
+    this._div.innerHTML = '<h4>' + MYAPP.indicator.year
         + ' (Round ' + MYAPP.indicator.round + ')</h4>'
         + (props ?
         '<b>' + props.name + ' ' + level_note + '</b><br />' + indicator_desc
@@ -230,7 +233,7 @@ function getColor(d) {
                d > 80 ? '#FFDC00' :
                d > 0 ? '#FF4136' :
                 '#ccc';
-            } 
+            }
     else {
         return d > 20 ? '#FF4136' :
                d > 10 ? '#FFDC00' :
@@ -303,8 +306,8 @@ function zoomToFeature(e) {
 };
 
 function onEachFeature(feature, layer) {
-    var lat, 
-        lng, 
+    var lat,
+        lng,
         latlng,
         icon,
         marker;
@@ -402,16 +405,16 @@ function loadPECSJSON(options) {
                     var key = row.year + '-' + row.round;
 
                     var admin_field = data[i].admin_field;
-                    
+
                     var dataRegion = data[i].admin_code;
                     var years = [2011,2012,2013,2014];
                     var rounds = [1,2];
 
                     for (var j = 0; j < json.features.length; j++) {
                         var jsonRegion = json.features[j].properties[admin_field];
-                        
+
                         if (dataRegion == jsonRegion) {
-                            
+
                             //Copy the data value into the JSON
                             json.features[j].properties[key + '_pecs'] = parseFloat(data[i].pecs);
                             json.features[j].properties[key + '_vas_6_11'] = parseFloat(data[i].vas_6_11);
@@ -419,7 +422,7 @@ function loadPECSJSON(options) {
                             json.features[j].properties[key + '_vas_6_59'] = parseFloat(data[i].vas_6_59);
                             json.features[j].properties[key + '_vas_6_59_f'] = parseFloat(data[i].vas_6_59_f);
                             json.features[j].properties[key + '_vas_6_59_m'] = parseFloat(data[i].vas_6_59_m);
-                            json.features[j].properties[key + '_dw_1259'] = parseFloat(data[i].vas_6_59_m);
+                            json.features[j].properties[key + '_dw_1259'] = parseFloat(data[i].dw_1259);
                             json.features[j].properties[key + '_admin_pecs_6_59'] = parseFloat(data[i].admin_pecs_6_59);
                             json.features[j].properties[key + '_pecs_admin_delta'] = parseFloat(data[i].pecs_admin_delta);
                             json.features[j].properties[key + '_admin_nat_6_59'] = parseFloat(data[i].admin_nat_6_59);
@@ -431,9 +434,9 @@ function loadPECSJSON(options) {
                         }
                     }
                 }
-               
+
                 MYAPP.pecs_datajson = json;
-                
+
                 // create JSON File
                 //createJSONFile(MYAPP.datajson);
                 loadMap(false);
@@ -494,9 +497,9 @@ function loadPointLayers() {
             } else {
                 color = "#2ECC40";
             }
-            
+
             if (feature.properties['gender'] == '1') {
-                icon_type = 'm' 
+                icon_type = 'm'
             } else {
                 icon_type = 'f';
             };
@@ -514,7 +517,7 @@ function heatMap() {
     var latlngs = [];
     layer = omnivore.csv('data/pecs/CM.LT-2013-1.csv');
 
-    
+
     //var latlngs = layer.getLatLngs();
     //console.log(latlngs);
 
@@ -557,9 +560,9 @@ L.geoJson(someGeojsonFeature, {
 
 function buildLegend () {
     if(legend.getContainer() !== undefined) {
-        legend.removeFrom(map);    
+        legend.removeFrom(map);
     }
-    
+
     legend.onAdd = function (map) {
         var div = L.DomUtil.create('div', 'info legend'),
             labels = [];
