@@ -63,7 +63,7 @@ var map = new L.Map('map', {
     maxZoom: 18,
     zoomControl: false,
     layers: [
-        L.tileLayer('https://{s}.tiles.mapbox.com/v3/ona.sr6kcsor/{z}/{x}/{y}.png', {
+        L.tileLayer('https://{s}.tiles.mapbox.com/v3/ona.dli0be29/{z}/{x}/{y}.png', {
         maxZoom: 9,
         minZoom: 0,
         attribution: '<a href="http://www.mapbox.com/about/maps/" target="_blank">Terms &amp; Feedback</a>'
