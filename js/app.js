@@ -496,10 +496,10 @@ map.on('zoomend', function(event){
 
     }
 
-    if (zoomLevel < 9) {
+    //if (zoomLevel < 9) {
 
     // need to figure out how to remove layer!!
-    
+
     //  if (google) {
     //    google.removeLayer(googesat).addTo(map)
     //  }
