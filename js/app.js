@@ -58,23 +58,25 @@ var gen_key = function() {
     return k;
 };
 
+
+
 var map = new L.Map('map', {
     minZoom: 0,
     maxZoom: 18,
     zoomControl: false,
     layers: [
         L.tileLayer('https://{s}.tiles.mapbox.com/v3/ona.dli0be29/{z}/{x}/{y}.png', {
-        maxZoom: 9,
+        maxZoom: 8,
         minZoom: 0,
         attribution: '<a href="http://www.mapbox.com/about/maps/" target="_blank">Terms &amp; Feedback</a>'
     }),
         L.tileLayer('https://{s}.tiles.mapbox.com/v3/ona.hbgm1c4d/{z}/{x}/{y}.png', {
-        maxZoom: 18,
-        minZoom: 10,
+        maxZoom: 23,
+        minZoom: 23,
         attribution: '<a href="http://www.mapbox.com/about/maps/" target="_blank">Terms &amp; Feedback</a>'
     })]
 })
-.setView([3,12],4);
+.setView([3,12],4)
 
 
 
@@ -247,8 +249,13 @@ function getColor(d) {
 // style country
 
 function style(feature) {
+    //console.log(map.getZoom())
     var key = gen_key();
     var bcolor;
+    var opacity;
+    var color;
+    var lineWeight;
+
     if (feature.properties[key + 'level'] == 'national') {
         bcolor = '#fff';
     } else {
@@ -256,19 +263,30 @@ function style(feature) {
     }
 
     if (feature.properties[key + '_' + MYAPP.indicator.code] > 0) {
+    var zoom = map.getZoom();
+    if (zoom > 8) {
+      opacity = 0.1;
+      color: '#000';
+      lineWeight = 3;
+
+    } else {
+      opacity = 0.5;
+      color: '#fff';
+      lineWeight = 0;
+    }
 
     return {
-        weight: 1,
+        weight: lineWeight,
         opacity: 1,
         color: '#fff',
         dashArray: '',
-        fillOpacity: 0.5,
+        fillOpacity: opacity,
         fillColor: getColor(feature.properties[key + '_' +MYAPP.indicator.code])
     }
 
     } else {
         return {
-            weight: 0,
+            weight: lineWeight,
             opacity: 1,
             color: '#fff',
             dashArray: '',
@@ -283,11 +301,18 @@ function style(feature) {
 function highlightFeature(e) {
     var layer = e.target;
 
+    var zoom = map.getZoom();
+    if (zoom > 8) {
+    opacity = 0.1;
+  } else {
+    opacity = 0.7;
+  }
+
     layer.setStyle({
         weight: 3,
         color: '#fff',
         dashArray: '',
-        fillOpacity: 0.7
+        fillOpacity: opacity
     });
 
     if (!L.Browser.ie && !L.Browser.opera) {
@@ -451,11 +476,31 @@ function loadPECSJSON(options) {
 loadPECSJSON();
 //loadAfricaJSON();
 
+
+
 map.on('zoomend', function(event){
+
+
     var zoomLevel = event.target.getZoom();
+    var google;
     if(zoomLevel < 7) {
         clearPointLayers();
     }
+    if(zoomLevel === 9) {
+      //google = new L.Google;
+      var googlesat = new L.Google;
+      var google = L.layerGroup([googlesat]).addTo(map);
+      console.log(google.getLayers());
+
+    }
+    if (zoomLevel < 9) {
+
+
+
+  //  }
+    }
+
+
 });
 
 var pointLayers = [];
@@ -474,6 +519,7 @@ function clearPointLayers() {
 function loadPointLayers() {
     var period = gen_key(),
         icon,
+        circlemarker,
         icon_type,
         code_hasc,
         csv_file,
@@ -503,8 +549,20 @@ function loadPointLayers() {
             } else {
                 icon_type = 'f';
             };
-            icon = L.MakiMarkers.icon({icon: icon_type, color: color, size: "s"});
-            return L.marker(latlng, {icon: icon});
+
+            //icon = L.MakiMarkers.icon({icon: icon_type, color: color, size: "s"});
+            //circlemarker = L.circleMarker({style: circleStyle});
+            //return L.marker(latlng, {circlemarker: style});
+            return L.circleMarker(latlng, {
+              color: '#fff',
+              border: 8,
+              fillColor: color,
+              fillOpacity: 0.9,
+              radius: 8,
+              opacity: 0.5}
+              );
+
+            //return L.marker(latlng, {icon: icon});
         };
         layer.addTo(map)
         pointLayers.push(layer);
@@ -601,6 +659,7 @@ function buildPicker() {
     picker.addTo(map);
 };
 
+//map.on("zoomend", function (e) { console.log("ZOOMEND", map.getZoom()); });
 
 buildLegend();
 //buildPicker();
