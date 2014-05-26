@@ -59,6 +59,8 @@ var gen_key = function() {
 };
 
 
+// sat - ona.j2pxecdi
+// orig ona.dli0be29
 
 var map = new L.Map('map', {
     minZoom: 0,
@@ -490,15 +492,22 @@ map.on('zoomend', function(event){
       //google = new L.Google;
       var googlesat = new L.Google;
       var google = L.layerGroup([googlesat]).addTo(map);
-      console.log(google.getLayers());
+
 
     }
+
     if (zoomLevel < 9) {
 
+    // need to figure out how to remove layer!!
+    
+    //  if (google) {
+    //    google.removeLayer(googesat).addTo(map)
+    //  }
 
 
-  //  }
-    }
+
+
+    //}
 
 
 });
@@ -557,7 +566,7 @@ function loadPointLayers() {
               color: '#fff',
               border: 8,
               fillColor: color,
-              fillOpacity: 0.9,
+              fillOpacity: 1,
               radius: 8,
               opacity: 0.5}
               );
