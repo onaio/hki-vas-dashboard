@@ -342,7 +342,7 @@ function onEachFeature(feature, layer) {
     lng = feature.properties[gen_key() + '_pecs_long']
     if(!isNaN(lat) && !isNaN(lng)) {
         latlng = L.latLng(lat, lng);
-        icon = L.MakiMarkers.icon({icon: "pharmacy", color: "#1087bf", size: "m"});
+        icon = L.MakiMarkers.icon({icon: "mobilephone", color: "#1087bf", size: "m"});
         marker = L.marker(latlng, {icon: icon});
         marker.layer = layer;
         marker.on('click', function(e){
@@ -425,6 +425,7 @@ function loadPECSJSON(options) {
 
         d3.csv("data/hki-vas-data.csv", function (data) {
             var allyears;
+
             d3.json("data/hki-pecs.geojson", function (json) {
                 var all_data = {};
                 for (var i = 0; i < data.length; i++) {
