@@ -55,29 +55,22 @@
 	<div class="page-container">
 		<div class="page-sidebar container" id="indicator-list">
 			<!-- BEGIN SIDEBAR MENU -->
-			<div class="navheader">VAS</div>
+			<div class="navheader">PECs Data</div>
 			<ul>
 				<li class="selected"><a href="#" onclick="selectIndicator(this, 'vas_6_59')">6-59m</a></li>
 				<li><a href="#" onclick="selectIndicator(this, 'vas_6_11')">6-11m</a></li>
 				<li><a href="#" onclick="selectIndicator(this, 'vas_12_59')">12-59m</a></li>
 				<li><a href="#" onclick="selectIndicator(this, 'vas_6_59_f')">6-59m Female</a></li>
 				<li><a href="#" onclick="selectIndicator(this, 'vas_6_59_m')">6-59m Male</a></li>
+				<li><a href="#" onclick="selectIndicator(this, 'dw_1259')">Deworming 12-59m</a></li>
 			</ul>
-			<div class="navheader">Administrative</div>
+			<div class="navheader">Administrative Data</div>
 			<ul class="">
-				<li><a href="#" onclick="selectIndicator(this, 'admin_pecs_6_59')">Catchment (6-59m)</a></li>
 				<li><a href="#" onclick="selectIndicator(this, 'admin_nat_6_59')">National 6-59m</a></li>
+				<li><a href="#" onclick="selectIndicator(this, 'admin_pecs_6_59')">HKI PECS Region 6-59m</a></li>
+				<li><a href="#" onclick="selectIndicator(this, 'pecs_admin_delta')">Difference Between <br>PECS & Admin Data</a></li>
 			</ul>
 
-			<div class="navheader">Difference</div>
-			<ul class="">
-				<li><a href="#" onclick="selectIndicator(this, 'pecs_admin_delta')">Pecs Admin &Delta;</a></li>
-			</ul>
-
-			<div class="navheader">Deworming</div>
-			<ul class="">
-				<li><a href="#" onclick="selectIndicator(this, 'dw_1259')">12-59m</a></li>
-			</ul><br/>
 
 			<!-- END SIDEBAR MENU -->
 			<br class="cls"/>
@@ -89,6 +82,7 @@
 </div>
 
 <script src="js/leaflet-0.7.2/leaflet.js"></script>
+<script src="http://d3js.org/topojson.v1.min.js"></script>
 <script src="http://maps.google.com/maps/api/js?v=3.2&sensor=false"></script>
 <script src='//api.tiles.mapbox.com/mapbox.js/plugins/leaflet-omnivore/v0.0.0/leaflet-omnivore.min.js'></script>
 <script src="js/d3.min.js"></script>
