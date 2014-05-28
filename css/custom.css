@@ -125,15 +125,17 @@ strong{ font-weight:700; }
 #about{
     background: url(../img/hki-pecs.jpg) no-repeat top center #DFDFDF;
     background-size:100%;
+    background-position:top center;
 }
 #about .about-pg{
     background:#F3F3F3;
     color:#444;
     font:15px Georgia!important;
     line-height:1.6em!important;
-    margin:38em auto 2em;
+/*    margin:38em auto 2em;*/
+    margin:34% auto 2em;
     padding:2em 4em;
-    width:48em;
+/*    width:48em;*/
     z-index:10000;
 }
 #about .jumbotron{
