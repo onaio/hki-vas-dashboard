@@ -20,7 +20,7 @@ strong{ font-weight:700; }
 	background:#545454;
 	color:#FFFFFF;
 }
-.header-inner .col-sm-5{
+.header-inner .col-sm-5, .header-inner .col-sm-8{
 	padding:1em 1em 1em 2em;
 }
 .header-inner .col-sm-2{
@@ -158,7 +158,6 @@ strong{ font-weight:700; }
     border-radius:0;
     color:#FFFFFF;
     padding:1.5em 2em;
-    position:absolute;
     margin-top:3.8em;
 }
 .back-btn:hover{
