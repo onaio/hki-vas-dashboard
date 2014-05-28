@@ -121,6 +121,58 @@ strong{ font-weight:700; }
 	padding:0 1.4em;
 }
 
+/*about*/
+#about{
+    background: url(../img/hki-pecs.jpg) no-repeat top center;
+    background-size:100%;
+}
+#about .about-pg{
+    background:#FFFFFF;
+    color:#444;
+    font:15px Georgia!important;
+    line-height:1.6em!important;
+    margin:32em auto 2em;
+    padding:2em 4em;
+    width:48em;
+    z-index:10000;
+}
+#about .jumbotron{
+    padding:0;
+}
+.about-pg h2{
+    font-weight:bold;
+}
+.about-pg h4{
+    font-size:17px;
+    font-weight:normal;
+    margin-bottom:1em;
+}
+.jumbotron img.img-responsive{
+    margin-top:-3em;
+    width:100%;
+}
+.back-btn{
+    background:#35A3D1;
+    border-radius:0;
+    color:#FFFFFF;
+    padding:1.5em 2em;
+    position:absolute;
+    margin-top:3.8em;
+}
+.back-btn:hover{
+    color:#FFF;
+}
+.about-pg p{
+    padding:0.4em 0;
+}
+.contact-lnk{
+    font-family:'Open Sans', sans-serif!important;
+}
+.contact-lnk a{
+    color:#444;
+    text-decoration:underline;
+}
+
 /*floating modals*/
 #fade-bg{
     background:rgba(0,0,0,0.5);
