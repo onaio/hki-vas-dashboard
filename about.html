@@ -21,106 +21,20 @@
 	<div class="header navbar navbar-fixed-top">
 		<!-- BEGIN TOP NAVIGATION BAR -->
 		<div class="header-inner">
-			<div class="col-sm-5"><br/>
-				<span class="head-title"><strong>HKI Vitamin A Supplementation (VAS)</strong> Coverage</span>
-			</div>
 			<div class="col-sm-5">
-				<div class="slidebox"><br/>
-					<input id="slider" data-slider-id='ex1Slider' type="text" data-slider-min="2011.5" data-slider-max="2013.5" data-slider-step="0.5" data-slider-value="2012"/>
-					<span id="updateRound"></span>
-					<br/>
-					<div class="slider-labels">
-						<span>2011 R2</span>
-						<span>2012 R1</span>
-						<span>2012 R2</span>
-						<span>2013 R1</span>
-						<span>2013 R2</span>
-					</div>
-				</div>
-			</div>
-
-			<div class="col-sm-2 logo-holder">
-				<!-- BEGIN LOGO -->
-				<a class="navbar-brand" href="index.html">
-					<img src="img/hki-logotype.png" alt="logo" class="img-responsive">
-				</a>
-				<!-- END LOGO -->
+				<span class="head-title"><strong>HKI Vitamin A Supplementation (VAS)</strong> Coverage</span>
 			</div>
 		</div>
 	<!-- END TOP NAVIGATION BAR -->
 	<br class="cls"/>
 	</div>
 
-	<!--<div id="content"></div>-->
-	<div class="page-container">
-		<div class="page-sidebar container" id="indicator-list">
-			<!-- BEGIN SIDEBAR MENU -->
-			<div class="navheader">PECs Data</div>
-			<ul>
-				<li class="selected"><a href="#" onclick="selectIndicator(this, 'vas_6_59')">6-59m</a></li>
-				<li><a href="#" onclick="selectIndicator(this, 'vas_6_11')">6-11m</a></li>
-				<li><a href="#" onclick="selectIndicator(this, 'vas_12_59')">12-59m</a></li>
-				<li><a href="#" onclick="selectIndicator(this, 'vas_6_59_f')">6-59m Female</a></li>
-				<li><a href="#" onclick="selectIndicator(this, 'vas_6_59_m')">6-59m Male</a></li>
-				<li><a href="#" onclick="selectIndicator(this, 'dw_1259')">Deworming 12-59m</a></li>
-			</ul>
-			<div class="navheader">Administrative Data</div>
-			<ul class="">
-				<li><a href="#" onclick="selectIndicator(this, 'admin_nat_6_59')">National 6-59m</a></li>
-				<li><a href="#" onclick="selectIndicator(this, 'admin_pecs_6_59')">HKI PECS Region 6-59m</a></li>
-				<li><a href="#" onclick="selectIndicator(this, 'pecs_admin_delta')">Difference Between <br>PECS & Admin Data</a></li>
-			</ul>
-
-
-			<!-- END SIDEBAR MENU -->
-			<br class="cls"/>
-		</div>
-
-		<div id="map" class="absolutes leaflet-container leaflet-fade-anim" tabindex="0" style="position:elative;"></div>
-	<br class="cls"/>
+	<div class="page-container clearfix">
+        <div class="jumbotron">
+        	<img class="img-responsive" src="img/" alt="HKI VAS Coverage image"/>
+        </div>
 	</div>
 </div>
-
-<script src="js/leaflet-0.7.2/leaflet.js"></script>
-<script src="http://d3js.org/topojson.v1.min.js"></script>
-<script src="http://maps.google.com/maps/api/js?v=3.2&sensor=false"></script>
-<script src='//api.tiles.mapbox.com/mapbox.js/plugins/leaflet-omnivore/v0.0.0/leaflet-omnivore.min.js'></script>
-<script src="js/d3.min.js"></script>
-<script src="js/underscore-min.js"></script>
-<script src="js/queue.v1.min.js"></script>
-<script src="js/topojson.min.js"></script>
 <script src="js/jquery.min.js"></script>
-<script src="js/leaflet-heat.js"></script>
-<script type="text/javascript" src="js/google.js"></script>
-<script src="js/Leaflet.MakiMarkers.js"></script>
-<script src="js/bootstrap-slider.js"></script>
-<script src="js/app.js"></script>
-<!--<script src="//code.jquery.com/ui/1.10.3/jquery-ui.js"></script>-->
-<!--<script src="ui/jquery.ui.labeledslider.js"></script>-->
-
-<script>
-var slider = $("#slider"),
-	value = 0,
-	year = 0,
-	round = 0;
-
-slider.slider({
-	tooltip: 'none',
-	formater: function(value){
-		year = Math.floor(value);
-		round = (Math.round(value)-year)+1;
-		return Math.floor(value) + ' Round '+round;
-	}
-}).on('slide', function(evt){
-	var value = evt.value;
-	var year = Math.round(value);
-	var round = 1;
-	if((year-value) > 0){
-		year = Math.floor(value);
-		round = 2;
-	}
-	setReportParameters(year, round);
-});
-</script>
 </body>
 </html>

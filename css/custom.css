@@ -73,6 +73,9 @@ strong{ font-weight:700; }
     position:relative;
     bottom:0;
 }
+.about-lnk a{
+    color:#888;
+}
 
 #map{
 	background:#CDE3F6;
