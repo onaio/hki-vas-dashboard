@@ -1,5 +1,5 @@
-body, *{
-	font-family:'Open Sans', sans-serif !important;
+body{
+	font-family:'Open Sans', sans-serif!important;
 }
 
 strong{ font-weight:700; }
@@ -20,7 +20,7 @@ strong{ font-weight:700; }
 	background:#545454;
 	color:#FFFFFF;
 }
-.header-inner .col-sm-5{
+.header-inner .col-sm-5, .header-inner .col-sm-8{
 	padding:1em 1em 1em 2em;
 }
 .header-inner .col-sm-2{
@@ -68,6 +68,14 @@ strong{ font-weight:700; }
 	color:#349ecd;
 	font-weight:bold;
 }
+.about-lnk{
+    margin-top:160%;
+    position:relative;
+    bottom:0;
+}
+.about-lnk a{
+    color:#888;
+}
 
 #map{
 	background:#CDE3F6;
@@ -113,3 +121,85 @@ strong{ font-weight:700; }
 	padding:0 1.4em;
 }
 
+/*about*/
+#about{
+    background: url(../img/hki-pecs.jpg) no-repeat top center #DFDFDF;
+    background-size:100%;
+    background-position:top center;
+}
+#about .about-pg{
+    background:#F3F3F3;
+    color:#444;
+    font:15px Georgia!important;
+    line-height:1.6em!important;
+/*    margin:38em auto 2em;*/
+    margin:34% auto 2em;
+    padding:2em 4em;
+/*    width:48em;*/
+    z-index:10000;
+}
+#about .jumbotron{
+    padding:0;
+}
+.about-pg h2{
+    font-weight:bold;
+}
+.about-pg h4{
+    font-size:17px;
+    font-weight:normal;
+    margin-bottom:1em;
+}
+.jumbotron img.img-responsive{
+    margin-top:-3em;
+    width:100%;
+}
+.back-btn{
+    background:#35A3D1;
+    border-radius:0;
+    color:#FFFFFF;
+    padding:1.5em 2em;
+    margin-top:3.8em;
+}
+.back-btn:hover{
+    color:#FFF;
+}
+.about-pg p{
+    padding:0.4em 0;
+}
+.contact-lnk{
+    font-family:'Open Sans', sans-serif!important;
+}
+.contact-lnk a{
+    color:#444;
+    text-decoration:underline;
+}
+
+/*floating modals*/
+#fade-bg{
+    background:rgba(0,0,0,0.5);
+    z-index: 10000;
+}
+#about-box{
+    background:#000;
+    box-shadow:0 6px 2px #333;
+    box-sizing: border-box;
+    color:#ffffff;
+    font:16px Georgia!important;
+    line-height:1.5em!important;
+    height:24em;
+    width:35em;
+    margin:auto;
+    padding:2em;
+    z-index: 10001;
+}
+#about-box .container > p:first-child{
+    border-bottom:0.1em solid #EFEFEF;
+    margin-bottom:1.7em;
+    padding:1em 2em 2em;
+}
+#about-box .img-responsive{
+    margin:0 auto;
+}
+#about-box a{
+    text-decoration:underline;
+}

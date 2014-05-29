@@ -3,7 +3,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-<title>HKI PECS</title>
+<title>HKI PECs</title>
 <meta charset="utf-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -67,10 +67,13 @@
 			<div class="navheader">Administrative Data</div>
 			<ul class="">
 				<li><a href="#" onclick="selectIndicator(this, 'admin_nat_6_59')">National 6-59m</a></li>
-				<li><a href="#" onclick="selectIndicator(this, 'admin_pecs_6_59')">HKI PECS Region 6-59m</a></li>
-				<li><a href="#" onclick="selectIndicator(this, 'pecs_admin_delta')">Difference Between <br>PECS & Admin Data</a></li>
+				<li><a href="#" onclick="selectIndicator(this, 'admin_pecs_6_59')">HKI PECs Region 6-59m</a></li>
+				<li><a href="#" onclick="selectIndicator(this, 'pecs_admin_delta')">Difference Between <br>PECs & Admin Data</a></li>
 			</ul>
-
+            
+            <div class="about-lnk">
+            	<a href="about.html">About this website</a>
+            </div>
 
 			<!-- END SIDEBAR MENU -->
 			<br class="cls"/>
@@ -78,6 +81,19 @@
 
 		<div id="map" class="absolutes leaflet-container leaflet-fade-anim" tabindex="0" style="position:elative;"></div>
 	<br class="cls"/>
+	</div>
+</div>
+<div id="fade-bg" class="absolutes modalbox"></div>
+<div id="about-box" class="absolutes modalbox">
+	<div class="container">
+		<p><img src="img/hki-logotype.png" alt="logo" class="img-responsive"></p>
+        <p>
+        	Vitamin A supplementation (VAS) is a widely recognized high-impact and cost-effective intervention that can 
+            reduce child mortality by 24%. In countries where HKI works, this means a potential of 269,991 lives saved 
+            in 2014 alone. This website shows coverage of vitamin A supplementation measured by post event coverage 
+            surveys and tally sheet data to track progress against our goal to reach 90% of children 6-59 months with 
+            vitamin A supplementation. <a class="close-modal" href="#">Explore the map &raquo;</a>
+        </p>
 	</div>
 </div>
 
@@ -97,7 +113,6 @@
 <script src="js/app.js"></script>
 <!--<script src="//code.jquery.com/ui/1.10.3/jquery-ui.js"></script>-->
 <!--<script src="ui/jquery.ui.labeledslider.js"></script>-->
-
 <script>
 var slider = $("#slider"),
 	value = 0,
@@ -120,6 +135,28 @@ slider.slider({
 		round = 2;
 	}
 	setReportParameters(year, round);
+});
+
+function getCookie(name) {
+  var value = "; " + document.cookie;
+  var parts = value.split("; " + name + "=");
+  if (parts.length == 2) return parts.pop().split(";").shift();
+}
+    
+$(document).ready(function(){
+    console.log("Cookie data: "+document.cookie);
+    //Hide modal if false
+    if(getCookie("intro")==false){
+        $(".modalbox").css("display","none");
+    }
+    else{
+        document.cookie="intro=false";
+    }
+    
+    $(".close-modal, .modalbox").click(function(e){
+        $(".modalbox").fadeOut(200);
+        e.preventDefault();
+    });
 });
 </script>
 </body>
