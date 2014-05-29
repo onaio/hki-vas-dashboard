@@ -19,6 +19,7 @@ var setupOptions = {
     name: VAS_INDICATORS['vas_6_59']
 };
 
+var googlelayer;
 
 var years = [2011, 2012, 2013];
 
@@ -30,6 +31,8 @@ var geojson;
 
 var markersList = []
 var markerLayerGroup;
+
+
 
 // control that shows state info on hover
 var info = L.control();
@@ -68,17 +71,14 @@ var map = new L.Map('map', {
     zoomControl: false,
     layers: [
         L.tileLayer('https://{s}.tiles.mapbox.com/v3/ona.dli0be29/{z}/{x}/{y}.png', {
-        maxZoom: 8,
+        maxZoom: 7,
         minZoom: 0,
-        attribution: '<a href="http://www.mapbox.com/about/maps/" target="_blank">Terms &amp; Feedback</a>'
-    }),
-        L.tileLayer('https://{s}.tiles.mapbox.com/v3/ona.hbgm1c4d/{z}/{x}/{y}.png', {
-        maxZoom: 23,
-        minZoom: 23,
         attribution: '<a href="http://www.mapbox.com/about/maps/" target="_blank">Terms &amp; Feedback</a>'
     })]
 })
 .setView([3,12],4)
+
+
 
 
 
@@ -485,33 +485,36 @@ map.on('zoomend', function(event){
 
 
     var zoomLevel = event.target.getZoom();
-    var google;
+
     if(zoomLevel < 7) {
         clearPointLayers();
     }
-    if(zoomLevel === 9) {
-      //google = new L.Google;
-      var googlesat = new L.Google;
-      var google = L.layerGroup([googlesat]).addTo(map);
+    if(zoomLevel === 8) {
 
+       if(typeof googlelayer === 'undefined') {
+          var googlesat = new L.Google;
+          var google = L.layerGroup([googlesat]).addTo(map);
+          googlelayer = google;
+       } else {
+         googlelayer.addTo(map);
+       }
 
     }
 
-    //if (zoomLevel < 9) {
 
+    if (zoomLevel === 7) {
+      console.log(googlelayer);
     // need to figure out how to remove layer!!
 
-    //  if (google) {
-    //    google.removeLayer(googesat).addTo(map)
-    //  }
+      if (googlelayer) {
+      //  console.log("z"+zoomLevel+"fire")
+      map.removeLayer(googlelayer);
 
+    }
 
-
-
-    //}
-
-
-});
+  }
+}
+);
 
 var pointLayers = [];
 
