@@ -55,7 +55,7 @@
 	<div class="page-container">
 		<div class="page-sidebar container" id="indicator-list">
 			<!-- BEGIN SIDEBAR MENU -->
-			<div class="navheader">PECs Data</div>
+			<div class="navheader">PECS Data</div>
 			<ul>
 				<li class="selected"><a href="#" onclick="selectIndicator(this, 'vas_6_59')">6-59m</a></li>
 				<li><a href="#" onclick="selectIndicator(this, 'vas_6_11')">6-11m</a></li>
@@ -70,9 +70,9 @@
 				<li><a href="#" onclick="selectIndicator(this, 'admin_pecs_6_59')">HKI PECs Region 6-59m</a></li>
 				<li><a href="#" onclick="selectIndicator(this, 'pecs_admin_delta')">Difference Between <br>PECs & Admin Data</a></li>
 			</ul>
-            
+
             <div class="about-lnk">
-            	<a href="about.html">About this website</a>
+            	<a href="about.html"><strong>About this website</strong></a>
             </div>
 
 			<!-- END SIDEBAR MENU -->
@@ -88,10 +88,10 @@
 	<div class="container">
 		<p><img src="img/hki-logotype.png" alt="logo" class="img-responsive"></p>
         <p>
-        	Vitamin A supplementation (VAS) is a widely recognized high-impact and cost-effective intervention that can 
-            reduce child mortality by 24%. In countries where HKI works, this means a potential of 269,991 lives saved 
-            in 2014 alone. This website shows coverage of vitamin A supplementation measured by post event coverage 
-            surveys and tally sheet data to track progress against our goal to reach 90% of children 6-59 months with 
+        	Vitamin A supplementation (VAS) is a widely recognized high-impact and cost-effective intervention that can
+            reduce child mortality by 24%. In countries where HKI works, this means a potential of 269,991 lives saved
+            in 2014 alone. This website shows coverage of vitamin A supplementation measured by post event coverage
+            surveys and tally sheet data to track progress against our goal to reach 90% of children 6-59 months with
             vitamin A supplementation. <a class="close-modal" href="#">Explore the map &raquo;</a>
         </p>
 	</div>
@@ -142,7 +142,7 @@ function getCookie(name) {
   var parts = value.split("; " + name + "=");
   if (parts.length == 2) return parts.pop().split(";").shift();
 }
-    
+
 $(document).ready(function(){
     console.log("Cookie data: "+document.cookie);
     //Hide modal if false
@@ -152,7 +152,7 @@ $(document).ready(function(){
     else{
         document.cookie="intro=false";
     }
-    
+
     $(".close-modal, .modalbox").click(function(e){
         $(".modalbox").fadeOut(200);
         e.preventDefault();

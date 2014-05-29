@@ -342,7 +342,7 @@ function onEachFeature(feature, layer) {
     lng = feature.properties[gen_key() + '_pecs_long']
     if(!isNaN(lat) && !isNaN(lng)) {
         latlng = L.latLng(lat, lng);
-        icon = L.MakiMarkers.icon({icon: "mobilephone", color: "#1087bf", size: "m"});
+        icon = L.MakiMarkers.icon({icon: "", color: "#1087bf", size: "m"});
         marker = L.marker(latlng, {icon: icon});
         marker.layer = layer;
         marker.on('click', function(e){
