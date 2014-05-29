@@ -240,7 +240,7 @@ info.update = function (props) {
 
 function getColor(d) {
 
-    if (MYAPP.indicator.code != 'pecs_admin_delta') {
+    if (MYAPP.indicator.code != 'pecs_admin_delta_positive') {
         return d > 90 ? '#2ECC40' :
                d > 80 ? '#FFDC00' :
                d > 0 ? '#FF4136' :
@@ -461,6 +461,7 @@ function loadPECSJSON(options) {
                             json.features[j].properties[key + '_dw_1259'] = parseFloat(data[i].dw_1259);
                             json.features[j].properties[key + '_admin_pecs_6_59'] = parseFloat(data[i].admin_pecs_6_59);
                             json.features[j].properties[key + '_pecs_admin_delta'] = parseFloat(data[i].pecs_admin_delta);
+                            json.features[j].properties[key + '_pecs_admin_delta_positive'] = parseFloat(data[i].pecs_admin_delta_positive);
                             json.features[j].properties[key + '_admin_nat_6_59'] = parseFloat(data[i].admin_nat_6_59);
                             json.features[j].properties[key + '_pecs_lat'] = parseFloat(data[i].pecs_lat);
                             json.features[j].properties[key + '_pecs_long'] = parseFloat(data[i].pecs_long);
@@ -493,7 +494,7 @@ map.on('zoomend', function(event){
 
 
     var zoomLevel = event.target.getZoom();
-    console.log("zoom = "+zoomLevel)
+
     if(zoomLevel < 7) {
         clearPointLayers();
     }
