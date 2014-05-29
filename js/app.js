@@ -65,6 +65,8 @@ var gen_key = function() {
 // sat - ona.j2pxecdi
 // orig ona.dli0be29
 
+//ona.dli0be29
+
 var map = new L.Map('map', {
     minZoom: 0,
     maxZoom: 18,
@@ -74,7 +76,13 @@ var map = new L.Map('map', {
         maxZoom: 7,
         minZoom: 0,
         attribution: '<a href="http://www.mapbox.com/about/maps/" target="_blank">Terms &amp; Feedback</a>'
-    })]
+    }),
+        L.tileLayer('https://{s}.tiles.mapbox.com/v3/ona.j2pxecdi/{z}/{x}/{y}.png', {
+        maxZoom: 8,
+        minZoom: 8,
+        attribution: '<a href="http://www.mapbox.com/about/maps/" target="_blank">Terms &amp; Feedback</a>'
+      })
+    ]
 })
 .setView([3,12],4)
 
@@ -304,7 +312,7 @@ function highlightFeature(e) {
     var layer = e.target;
 
     var zoom = map.getZoom();
-    if (zoom > 8) {
+    if (zoom > 9) {
     opacity = 0.1;
   } else {
     opacity = 0.7;
@@ -485,7 +493,7 @@ map.on('zoomend', function(event){
 
 
     var zoomLevel = event.target.getZoom();
-
+    console.log("zoom = "+zoomLevel)
     if(zoomLevel < 7) {
         clearPointLayers();
     }
