@@ -434,7 +434,7 @@ function loadPECSJSON(options) {
         d3.csv("data/hki-vas-data.csv", function (data) {
             var allyears;
 
-            d3.json("data/hki-pecs.geojson", function (json) {
+            d3.json("data/hki-pecs-40.geojson", function (json) {
                 var all_data = {};
                 for (var i = 0; i < data.length; i++) {
                     var row = data[i];
