@@ -19,6 +19,7 @@ strong{ font-weight:700; }
 .header.navbar{
 	background:#545454;
 	color:#FFFFFF;
+    z-index:20000;
 }
 .header-inner .col-sm-5, .header-inner .col-sm-8{
 	padding:1em 1em 1em 2em;
@@ -43,7 +44,7 @@ strong{ font-weight:700; }
 	min-width:14em;
 	padding-left:2em;
 	padding-top:7em;
-	position:absolute;
+	position:fixed;
 	top:0;bottom:0;
 }
 .navheader{
@@ -69,9 +70,9 @@ strong{ font-weight:700; }
 	font-weight:bold;
 }
 .about-lnk{
-    margin-top:160%;
-    position:relative;
-    bottom:0;
+/*    margin-top:160%;*/
+    position:absolute;
+    bottom:20px;
 }
 .about-lnk a{
     color:#888;
@@ -130,7 +131,7 @@ strong{ font-weight:700; }
 #about .about-pg{
     background:#F3F3F3;
     color:#444;
-    font:15px Georgia!important;
+    font:18px Georgia!important;
     line-height:1.6em!important;
 /*    margin:38em auto 2em;*/
     margin:34% auto 2em;
@@ -158,6 +159,7 @@ strong{ font-weight:700; }
     border-radius:0;
     color:#FFFFFF;
     padding:1.5em 2em;
+    position:fixed;
     margin-top:3.8em;
 }
 .back-btn:hover{
