@@ -20,19 +20,24 @@ strong{ font-weight:700; }
 	background:#545454;
 	color:#FFFFFF;
     z-index:20000;
+    overflow-y:hidden;
 }
-.header-inner .col-sm-5, .header-inner .col-sm-8{
-	padding:1em 1em 1em 2em;
+#map_bd .header.navbar{
+    min-height:5em;
+}
+.header-box{
+    padding-top:1.2em;
 }
 .header-inner .col-sm-2{
-	padding:1em 0;
+	padding:2em 0;
 }
 .head-title{
-	font-size:1.2em;
+	font-size:1.3em;
 	text-transform:uppercase;
 }
 .logo-holder{
 	border-left:1px solid #808080;
+    height:6.4em;
 }
 .navbar-brand img{
 	margin-left:2em;
@@ -41,9 +46,9 @@ strong{ font-weight:700; }
 .page-sidebar{
 	background:#F3F3F3;
 	min-height:45em;
-	min-width:14em;
+	width:14em;
 	padding-left:2em;
-	padding-top:7em;
+	padding-top:6em;
 	position:fixed;
 	top:0;bottom:0;
 }
@@ -80,7 +85,7 @@ strong{ font-weight:700; }
 
 #map{
 	background:#CDE3F6;
-	margin-top:7.5em;
+	margin-top:5.5em;
 	height:auto!important;
 	margin-left:16em;
 }
@@ -109,9 +114,12 @@ strong{ font-weight:700; }
 	margin-right: 8px;
 	opacity: 0.7;
 }
-.slidebox{  }
+.slidebox{
+    margin:0;
+    padding-top:1.2em;
+}
 .slider.slider-horizontal{
-	height:16px;
+	height:10px;
 	margin-left:2.4em;
 	width:400px;
 }
@@ -127,6 +135,9 @@ strong{ font-weight:700; }
     background: url(../img/hki-pecs.jpg) no-repeat top center #DFDFDF;
     background-size:100%;
     background-position:top center;
+}
+#about .header.navbar{
+    height:4.2em;
 }
 #about .about-pg{
     background:#F3F3F3;
@@ -160,7 +171,7 @@ strong{ font-weight:700; }
     color:#FFFFFF;
     padding:1.5em 2em;
     position:fixed;
-    margin-top:3.8em;
+    margin-top:4.2em;
 }
 .back-btn:hover{
     color:#FFF;
@@ -179,7 +190,7 @@ strong{ font-weight:700; }
 /*floating modals*/
 #fade-bg{
     background:rgba(0,0,0,0.5);
-    z-index: 10000;
+    z-index: 20000;
 }
 #about-box{
     background:#000;
@@ -192,7 +203,7 @@ strong{ font-weight:700; }
     width:35em;
     margin:auto;
     padding:2em;
-    z-index: 10001;
+    z-index: 20001;
 }
 #about-box .container > p:first-child{
     border-bottom:0.1em solid #EFEFEF;
