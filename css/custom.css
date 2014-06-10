@@ -34,6 +34,9 @@ strong{ font-weight:700; }
     top:0;bottom:0;right:0;
 */
 }
+.navbar-brand{
+    padding:6.3%;
+}
 .navbar-brand img{
     margin-left:2em;
 }
