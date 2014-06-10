@@ -17,27 +17,19 @@ strong{ font-weight:700; }
 }
 
 .header.navbar{
-	background:#545454;
-	color:#FFFFFF;
-    z-index:20000;
-    overflow-y:hidden;
-}
-.header-box{
-    padding-top:1.2em;
-}
-.header-inner .col-sm-2{
-	padding:2em 0;
+    background:#545454;
+    color:#FFFFFF;
+    height:5.2em;
 }
 .head-title{
-	font-size:135%;
-	text-transform:uppercase;
+    font-size:130%;
+    text-transform:uppercase;
 }
 .logo-holder{
-	border-left:1px solid #808080;
-    height:6.4em;
+    border-left:1px solid #808080;
 }
 .navbar-brand img{
-	margin-left:2em;
+    margin-left:2em;
 }
 
 .page-sidebar{
@@ -133,9 +125,6 @@ strong{ font-weight:700; }
     background-size:100%;
     background-position:top center;
 }
-#about .header.navbar{
-    height:4.2em;
-}
 #about .about-pg{
     background:#F3F3F3;
     color:#444;
@@ -201,6 +190,9 @@ strong{ font-weight:700; }
     margin:auto;
     padding:2em;
     z-index: 20001;
+}
+#about-box .container{
+    width:auto;
 }
 #about-box .container > p:first-child{
     border-bottom:0.1em solid #EFEFEF;
