@@ -139,6 +139,7 @@ strong{ font-weight:700; }
 #about .header.navbar{
     height:4.5em;
     margin-top:-.3em;
+    z-index:20000;
 }
 #about .about-pg{
     background:#F3F3F3;
@@ -172,7 +173,7 @@ strong{ font-weight:700; }
     background:#35A3D1;
     border-radius:0;
     color:#FFFFFF;
-    padding:1.5em 2em;
+    padding:1.2em 1.6em;
     position:fixed;
     margin-top:4.2em;
 }
