@@ -36,9 +36,23 @@ $(document).ready(function(){
     else{
         document.cookie="intro=false";
     }
-    
+    //Modal control
     $(".close-modal").click(function(e){
         $(".modalbox").fadeOut(200);
         e.preventDefault();
+    });
+    //Ajxcall
+    $("#mpform").submit(function(e){
+        e.preventDefault();
+        
+        var txt = $(this).children("input").val();
+        $("legend").text(txt);
+        
+        $.ajax({
+            url: "exec.php",
+            type: "POST"
+        }).done(function(){
+            $("legend").text('<a class="close-modal" href="#">Explore the map &raquo;</a><a class="close-modal" href="#">Explore the map &raquo;</a>');
+        });
     });
 });
