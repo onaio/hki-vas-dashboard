@@ -77,8 +77,8 @@ strong{ font-weight:700; }
     position:absolute;
     bottom:20px;
 }
-.about-lnk a{
-    color:#555;
+.about-lnk a, .about-lnk .glyphicon{
+    color:#777;
 }
 
 #map{
@@ -86,7 +86,9 @@ strong{ font-weight:700; }
 	margin-top:5.5em;
 	height:auto!important;
 	margin-left:16em;
+    min-width:500px;
 }
+.leaflet-top.leaflet-right{ margin-top:.9em; }
 
 .info {
 	padding: 6px 8px;
@@ -134,6 +136,10 @@ strong{ font-weight:700; }
     background-size:100%;
     background-position:top center;
 }
+#about .header.navbar{
+    height:4.5em;
+    margin-top:-.3em;
+}
 #about .about-pg{
     background:#F3F3F3;
     color:#444;
@@ -150,11 +156,13 @@ strong{ font-weight:700; }
 }
 .about-pg h2{
     font-weight:bold;
+    font-family:'Open Sans'!important;
 }
 .about-pg h4{
+    font-family:'Open Sans'!important;
     font-size:17px;
     font-weight:normal;
-    margin-bottom:1em;
+    margin-bottom:1.2em;
 }
 .jumbotron img.img-responsive{
     margin-top:-3em;
