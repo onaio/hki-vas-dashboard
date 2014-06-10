@@ -97,6 +97,19 @@
             surveys and tally sheet data to track progress against our goal to reach 90% of children 6-59 months with 
             vitamin A supplementation. <a class="close-modal" href="#">Explore the map &raquo;</a>
         </p>
+        <p>
+            <fieldset>
+            <legend></legend>
+        	<form role="form" method="post" class="form-inline">
+        		<input class="form-control" name="password" type="password"
+                    placeholder="Enter password"/>
+                <button type="submit" class="btn btn-primary">
+                	<i class="glyphicon glyphicon-lock"></i> 
+                    Log in to Explore map
+                </button>
+        	</form>
+            </fieldset>
+        </p>
 	</div>
 </div>
 
@@ -114,51 +127,6 @@
 <script src="js/Leaflet.MakiMarkers.js"></script>
 <script src="js/bootstrap-slider.js"></script>
 <script src="js/app.js"></script>
-<script>
-var slider = $("#slider"),
-	value = 0,
-	year = 0,
-	round = 0;
-
-slider.slider({
-	tooltip: 'none',
-	formater: function(value){
-		year = Math.floor(value);
-		round = (Math.round(value)-year)+1;
-		return Math.floor(value) + ' Round '+round;
-	}
-}).on('slide', function(evt){
-	var value = evt.value;
-	var year = Math.round(value);
-	var round = 1;
-	if((year-value) > 0){
-		year = Math.floor(value);
-		round = 2;
-	}
-	setReportParameters(year, round);
-});
-
-function getCookie(name) {
-  var value = "; " + document.cookie;
-  var parts = value.split("; " + name + "=");
-  if (parts.length == 2) return parts.pop().split(";").shift();
-}
-    
-$(document).ready(function(){
-    console.log("Cookie data: "+document.cookie);
-    //Hide modal if false
-    if(getCookie("intro")==false){
-        $(".modalbox").css("display","none");
-    }
-    else{
-        document.cookie="intro=false";
-    }
-    
-    $(".close-modal").click(function(e){
-        $(".modalbox").fadeOut(200);
-        e.preventDefault();
-    });
-});
-</script>
+<script src="js/custom.js"></script>
 </body>
 </html>

@@ -79,7 +79,7 @@ strong{ font-weight:700; }
 }
 
 #map{
-	background:#CDE3F6;
+	background:#9FC9FB;
 	margin-top:5.5em;
 	height:auto!important;
 	margin-left:16em;
@@ -204,7 +204,7 @@ strong{ font-weight:700; }
     color:#ffffff;
     font:16px Georgia!important;
     line-height:1.5em!important;
-    height:24em;
+    height:27em;
     width:35em;
     margin:auto;
     padding:2em;
@@ -223,6 +223,14 @@ strong{ font-weight:700; }
 }
 #about-box a{
     text-decoration:underline;
+}
+
+/*Forms*/
+.form-inline input, .form-inline button{
+    border-radius:0;
+}
+.form-inline input{
+    width:60%!important;
 }
 
 /*Responsive-grids*/
