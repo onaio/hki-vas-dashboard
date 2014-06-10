@@ -19,7 +19,7 @@ strong{ font-weight:700; }
 .header.navbar{
     background:#545454;
     color:#FFFFFF;
-    height:5.2em;
+    height:5.5em;
 }
 .head-title{
     font-size:130%;
@@ -27,6 +27,9 @@ strong{ font-weight:700; }
 }
 .logo-holder{
     border-left:1px solid #808080;
+    padding-top:.4em;
+    position:absolute;
+    top:0;bottom:0;right:0;
 }
 .navbar-brand img{
     margin-left:2em;
