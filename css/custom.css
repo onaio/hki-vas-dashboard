@@ -28,8 +28,11 @@ strong{ font-weight:700; }
 .logo-holder{
     border-left:1px solid #808080;
     padding-top:.4em;
+    padding-bottom:1.5em;
+/*
     position:absolute;
     top:0;bottom:0;right:0;
+*/
 }
 .navbar-brand img{
     margin-left:2em;
@@ -207,4 +210,25 @@ strong{ font-weight:700; }
 }
 #about-box a{
     text-decoration:underline;
+}
+
+/*Responsive-grids*/
+@media (max-width:991px) { 
+	
+}
+
+@media (min-width: 768px) and (max-width: 991px) { 
+    
+}
+
+@media (max-width: 767px) { 
+	
+}
+
+@media (max-width: 480px) {
+    
+}
+
+@media (max-width: 320px) {
+    
 }
