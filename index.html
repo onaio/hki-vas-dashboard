@@ -114,8 +114,6 @@
 <script src="js/Leaflet.MakiMarkers.js"></script>
 <script src="js/bootstrap-slider.js"></script>
 <script src="js/app.js"></script>
-<!--<script src="//code.jquery.com/ui/1.10.3/jquery-ui.js"></script>-->
-<!--<script src="ui/jquery.ui.labeledslider.js"></script>-->
 <script>
 var slider = $("#slider"),
 	value = 0,
@@ -156,7 +154,7 @@ $(document).ready(function(){
         document.cookie="intro=false";
     }
     
-    $(".close-modal, .modalbox").click(function(e){
+    $(".close-modal").click(function(e){
         $(".modalbox").fadeOut(200);
         e.preventDefault();
     });
