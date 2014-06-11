@@ -22,6 +22,7 @@ slider.slider({
 });
 
 $(document).ready(function(){
+            $.cookie('hkistr',0);
     if($.cookie('hkistr')!=1){
         $(".modalbox").show();
     }
@@ -36,7 +37,7 @@ $(document).ready(function(){
         
         var tfield = $(this).children("input");
         var txt = tfield.val();
-        if(txt == 'password' || txt == undefined){
+        if(txt == 'orange' || txt == undefined){
             $.cookie('hkistr',1);
             $(".modalbox").fadeOut(200);
         }
