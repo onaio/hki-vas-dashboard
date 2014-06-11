@@ -9,6 +9,15 @@ strong{ font-weight:700; }
 	position:absolute;
 	top:0;bottom:0;left:0;right:0;
 }
+span.error{
+    color:red;
+    font:14px 'Open Sans';
+    font-style:italic;
+}
+input.error{
+    background:pink;
+    border:1px solid red;
+}
 
 #wrapper{
 	top:0;bottom:0;left:0;right:0;
@@ -193,6 +202,9 @@ strong{ font-weight:700; }
 }
 
 /*floating modals*/
+.modalbox{
+    display:none;
+}
 #fade-bg{
     background:rgba(0,0,0,0.5);
     z-index: 20000;
@@ -204,7 +216,7 @@ strong{ font-weight:700; }
     color:#ffffff;
     font:16px Georgia!important;
     line-height:1.5em!important;
-    height:27em;
+    height:28em;
     width:35em;
     margin:auto;
     padding:2em;

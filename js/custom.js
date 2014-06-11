@@ -21,20 +21,9 @@ slider.slider({
 	setReportParameters(year, round);
 });
 
-function getCookie(name) {
-  var value = "; " + document.cookie;
-  var parts = value.split("; " + name + "=");
-  if (parts.length == 2) return parts.pop().split(";").shift();
-}
-    
 $(document).ready(function(){
-    console.log("Cookie data: "+document.cookie);
-    //Hide modal if false
-    if(getCookie("intro")==false){
-        $(".modalbox").css("display","none");
-    }
-    else{
-        document.cookie="intro=false";
+    if($.cookie('hkistr')!=1){
+        $(".modalbox").show();
     }
     //Modal control
     $(".close-modal").click(function(e){
@@ -45,10 +34,15 @@ $(document).ready(function(){
     $("#mpform").submit(function(e){
         e.preventDefault();
         
-        var txt = $(this).children("input").val();
-        $("legend").text(txt);
-        if(txt == 'password'){
+        var tfield = $(this).children("input");
+        var txt = tfield.val();
+        if(txt == 'password' || txt == undefined){
+            $.cookie('hkistr',1);
             $(".modalbox").fadeOut(200);
+        }
+        else{
+            $("#mpform").next("span").text("Enter correct password").addClass("error");
+            tfield.addClass("error");
         }
         
         $.ajax({
