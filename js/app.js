@@ -19,6 +19,7 @@ var setupOptions = {
     name: VAS_INDICATORS['vas_6_59']
 };
 
+var googlelayer;
 
 var years = [2011, 2012, 2013];
 
@@ -30,6 +31,8 @@ var geojson;
 
 var markersList = []
 var markerLayerGroup;
+
+
 
 // control that shows state info on hover
 var info = L.control();
@@ -62,23 +65,28 @@ var gen_key = function() {
 // sat - ona.j2pxecdi
 // orig ona.dli0be29
 
+//ona.dli0be29
+
 var map = new L.Map('map', {
     minZoom: 0,
     maxZoom: 18,
     zoomControl: false,
     layers: [
         L.tileLayer('https://{s}.tiles.mapbox.com/v3/ona.dli0be29/{z}/{x}/{y}.png', {
-        maxZoom: 8,
+        maxZoom: 7,
         minZoom: 0,
         attribution: '<a href="http://www.mapbox.com/about/maps/" target="_blank">Terms &amp; Feedback</a>'
     }),
-        L.tileLayer('https://{s}.tiles.mapbox.com/v3/ona.hbgm1c4d/{z}/{x}/{y}.png', {
-        maxZoom: 23,
-        minZoom: 23,
+        L.tileLayer('https://{s}.tiles.mapbox.com/v3/ona.bb70t3xr/{z}/{x}/{y}.png', {
+        maxZoom: 12,
+        minZoom: 8,
         attribution: '<a href="http://www.mapbox.com/about/maps/" target="_blank">Terms &amp; Feedback</a>'
-    })]
+      })
+    ]
 })
 .setView([3,12],4)
+
+
 
 
 
@@ -232,7 +240,7 @@ info.update = function (props) {
 
 function getColor(d) {
 
-    if (MYAPP.indicator.code != 'pecs_admin_delta') {
+    if (MYAPP.indicator.code != 'pecs_admin_delta_positive') {
         return d > 90 ? '#2ECC40' :
                d > 80 ? '#FFDC00' :
                d > 0 ? '#FF4136' :
@@ -304,7 +312,7 @@ function highlightFeature(e) {
     var layer = e.target;
 
     var zoom = map.getZoom();
-    if (zoom > 8) {
+    if (zoom > 9) {
     opacity = 0.1;
   } else {
     opacity = 0.7;
@@ -342,7 +350,7 @@ function onEachFeature(feature, layer) {
     lng = feature.properties[gen_key() + '_pecs_long']
     if(!isNaN(lat) && !isNaN(lng)) {
         latlng = L.latLng(lat, lng);
-        icon = L.MakiMarkers.icon({icon: "mobilephone", color: "#1087bf", size: "m"});
+        icon = L.MakiMarkers.icon({icon: "circle-stroked", color: "#1087bf", size: "m"});
         marker = L.marker(latlng, {icon: icon});
         marker.layer = layer;
         marker.on('click', function(e){
@@ -426,7 +434,7 @@ function loadPECSJSON(options) {
         d3.csv("data/hki-vas-data.csv", function (data) {
             var allyears;
 
-            d3.json("data/hki-pecs.geojson", function (json) {
+            d3.json("data/hki-pecs-40.geojson", function (json) {
                 var all_data = {};
                 for (var i = 0; i < data.length; i++) {
                     var row = data[i];
@@ -453,6 +461,7 @@ function loadPECSJSON(options) {
                             json.features[j].properties[key + '_dw_1259'] = parseFloat(data[i].dw_1259);
                             json.features[j].properties[key + '_admin_pecs_6_59'] = parseFloat(data[i].admin_pecs_6_59);
                             json.features[j].properties[key + '_pecs_admin_delta'] = parseFloat(data[i].pecs_admin_delta);
+                            json.features[j].properties[key + '_pecs_admin_delta_positive'] = parseFloat(data[i].pecs_admin_delta_positive);
                             json.features[j].properties[key + '_admin_nat_6_59'] = parseFloat(data[i].admin_nat_6_59);
                             json.features[j].properties[key + '_pecs_lat'] = parseFloat(data[i].pecs_lat);
                             json.features[j].properties[key + '_pecs_long'] = parseFloat(data[i].pecs_long);
@@ -485,33 +494,36 @@ map.on('zoomend', function(event){
 
 
     var zoomLevel = event.target.getZoom();
-    var google;
+
     if(zoomLevel < 7) {
         clearPointLayers();
     }
-    if(zoomLevel === 9) {
-      //google = new L.Google;
-      var googlesat = new L.Google;
-      var google = L.layerGroup([googlesat]).addTo(map);
+    if(zoomLevel === 8) {
 
+       if(typeof googlelayer === 'undefined') {
+          var googlesat = new L.Google;
+          var google = L.layerGroup([googlesat]).addTo(map);
+          googlelayer = google;
+       } else {
+         googlelayer.addTo(map);
+       }
 
     }
 
-    //if (zoomLevel < 9) {
 
+    if (zoomLevel === 7) {
+      console.log(googlelayer);
     // need to figure out how to remove layer!!
 
-    //  if (google) {
-    //    google.removeLayer(googesat).addTo(map)
-    //  }
+      if (googlelayer) {
+      //  console.log("z"+zoomLevel+"fire")
+      map.removeLayer(googlelayer);
 
+    }
 
-
-
-    //}
-
-
-});
+  }
+}
+);
 
 var pointLayers = [];
 
