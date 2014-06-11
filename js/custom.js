@@ -22,7 +22,6 @@ slider.slider({
 });
 
 $(document).ready(function(){
-            $.cookie('hkistr',0);
     if($.cookie('hkistr')!=1){
         $(".modalbox").show();
     }
