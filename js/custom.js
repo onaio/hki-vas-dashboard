@@ -44,12 +44,5 @@ $(document).ready(function(){
             $("#mpform").next("span").text("Enter correct password").addClass("error");
             tfield.addClass("error");
         }
-        
-        $.ajax({
-            url: "exec/exec.php",
-            type: "POST"
-        }).done(function(){
-            $("legend").text('<a class="close-modal" href="#">Explore the map &raquo;</a><a class="close-modal" href="#">Explore the map &raquo;</a>');
-        });
     });
 });
