@@ -47,9 +47,12 @@ $(document).ready(function(){
         
         var txt = $(this).children("input").val();
         $("legend").text(txt);
+        if(txt == 'password'){
+            $(".modalbox").fadeOut(200);
+        }
         
         $.ajax({
-            url: "exec.php",
+            url: "exec/exec.php",
             type: "POST"
         }).done(function(){
             $("legend").text('<a class="close-modal" href="#">Explore the map &raquo;</a><a class="close-modal" href="#">Explore the map &raquo;</a>');
