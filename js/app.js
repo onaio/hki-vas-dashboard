@@ -12,6 +12,9 @@ var VAS_INDICATORS = {
     dw_1259: 'Deworming (12-59m)'
 };
 
+L.mapbox.accessToken = 'pk.eyJ1Ijoib25hIiwiYSI6IlVYbkdyclkifQ.0Bz-QOOXZZK01dq4MuMImQ';
+// Create a map in the div #map
+
 var setupOptions = {
     year: '2012',
     round: 2,
@@ -351,7 +354,23 @@ function onEachFeature(feature, layer) {
     if(!isNaN(lat) && !isNaN(lng)) {
         latlng = L.latLng(lat, lng);
         icon = L.MakiMarkers.icon({icon: "circle-stroked", color: "#1087bf", size: "m"});
-        marker = L.marker(latlng, {icon: icon});
+        //icon = L.mapbox.marker.icon({'marker-color': '#f86767'});
+
+
+        //icon = L.mapbox.marker.icon({'marker-color': '#f86767'});
+
+
+        //marker = L.marker(latlng, {icon: icon});
+
+
+      marker = L.marker(latlng, {
+    icon: L.mapbox.marker.icon({
+        'marker-size': 'small',
+        'marker-color': '#fa0'
+    })
+})
+
+
         marker.layer = layer;
         marker.on('click', function(e){
             layer = e.target.layer;
