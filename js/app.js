@@ -12,6 +12,9 @@ var VAS_INDICATORS = {
     dw_1259: 'Deworming (12-59m)'
 };
 
+L.mapbox.accessToken = 'pk.eyJ1Ijoib25hIiwiYSI6IlVYbkdyclkifQ.0Bz-QOOXZZK01dq4MuMImQ';
+// Create a map in the div #map
+
 var setupOptions = {
     year: '2012',
     round: 2,
@@ -72,7 +75,7 @@ var map = new L.Map('map', {
     maxZoom: 18,
     zoomControl: false,
     layers: [
-        L.tileLayer('https://{s}.tiles.mapbox.com/v3/ona.dli0be29/{z}/{x}/{y}.png', {
+        L.tileLayer('https://{s}.tiles.mapbox.com/v3/ona.sl2l0udi/{z}/{x}/{y}.png', {
         maxZoom: 7,
         minZoom: 0,
         attribution: '<a href="http://www.mapbox.com/about/maps/" target="_blank">Terms &amp; Feedback</a>'
@@ -240,7 +243,7 @@ info.update = function (props) {
 
 function getColor(d) {
 
-    if (MYAPP.indicator.code != 'pecs_admin_delta_positive') {
+    if (MYAPP.indicator.code != 'pecs_admin_delta') {
         return d > 90 ? '#2ECC40' :
                d > 80 ? '#FFDC00' :
                d > 0 ? '#FF4136' :
@@ -351,7 +354,23 @@ function onEachFeature(feature, layer) {
     if(!isNaN(lat) && !isNaN(lng)) {
         latlng = L.latLng(lat, lng);
         icon = L.MakiMarkers.icon({icon: "circle-stroked", color: "#1087bf", size: "m"});
-        marker = L.marker(latlng, {icon: icon});
+        //icon = L.mapbox.marker.icon({'marker-color': '#f86767'});
+
+
+        //icon = L.mapbox.marker.icon({'marker-color': '#f86767'});
+
+
+        //marker = L.marker(latlng, {icon: icon});
+
+
+      marker = L.marker(latlng, {
+    icon: L.mapbox.marker.icon({
+        'marker-size': 'small',
+        'marker-color': '#fa0'
+    })
+})
+
+
         marker.layer = layer;
         marker.on('click', function(e){
             layer = e.target.layer;
@@ -460,8 +479,8 @@ function loadPECSJSON(options) {
                             json.features[j].properties[key + '_vas_6_59_m'] = parseFloat(data[i].vas_6_59_m);
                             json.features[j].properties[key + '_dw_1259'] = parseFloat(data[i].dw_1259);
                             json.features[j].properties[key + '_admin_pecs_6_59'] = parseFloat(data[i].admin_pecs_6_59);
-                            json.features[j].properties[key + '_pecs_admin_delta'] = parseFloat(data[i].pecs_admin_delta);
-                            json.features[j].properties[key + '_pecs_admin_delta_positive'] = parseFloat(data[i].pecs_admin_delta_positive);
+                            //json.features[j].properties[key + '_pecs_admin_delta'] = parseFloat(data[i].pecs_admin_delta);
+                            json.features[j].properties[key + '_pecs_admin_delta'] = parseFloat(data[i].pecs_admin_delta_positive);
                             json.features[j].properties[key + '_admin_nat_6_59'] = parseFloat(data[i].admin_nat_6_59);
                             json.features[j].properties[key + '_pecs_lat'] = parseFloat(data[i].pecs_lat);
                             json.features[j].properties[key + '_pecs_long'] = parseFloat(data[i].pecs_long);

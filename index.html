@@ -6,7 +6,8 @@
 <title>HKI PECs</title>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<link rel="stylesheet" href="js/leaflet-0.7.2/leaflet.css" />
+
+<link href='https://api.tiles.mapbox.com/mapbox.js/v2.0.1/mapbox.css' rel='stylesheet' />
 <link rel="stylesheet" href="css/bootstrap.min.css"/>
 <link href="//fonts.googleapis.com/css?family=Open+Sans:400,700"/>
 <!--<link rel="stylesheet" type="text/css" href="//code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css"/>-->
@@ -69,7 +70,7 @@
 			<ul class="">
 				<li><a href="#" onclick="selectIndicator(this, 'admin_nat_6_59')">National 6-59m</a></li>
 				<li><a href="#" onclick="selectIndicator(this, 'admin_pecs_6_59')">HKI PECs Region 6-59m</a></li>
-				<li><a href="#" onclick="selectIndicator(this, 'pecs_admin_delta_positive')">Difference Between <br>PECs & Admin Data</a></li>
+				<li><a href="#" onclick="selectIndicator(this, 'pecs_admin_delta')">Difference Between <br>PECs & Admin Data</a></li>
 			</ul>
 
             <div class="about-lnk">
@@ -111,7 +112,8 @@
 	</div>
 </div>
 
-<script src="js/leaflet-0.7.2/leaflet.js"></script>
+
+<script src='https://api.tiles.mapbox.com/mapbox.js/v2.0.1/mapbox.js'></script>
 <script src="http://d3js.org/topojson.v1.min.js"></script>
 <script src="http://maps.google.com/maps/api/js?v=3.2&sensor=false"></script>
 <script src='//api.tiles.mapbox.com/mapbox.js/plugins/leaflet-omnivore/v0.0.0/leaflet-omnivore.min.js'></script>
