@@ -125,9 +125,10 @@ MYAPP.countryjson = null;
 
 
 
-function setReportParameters(year,round) {
+function setReportParameters(year,round, category) {
     MYAPP.indicator.year = year;
     MYAPP.indicator.round = round;
+    MYAPP._category = category
     var options = MYAPP.indicator;
     options.year = year;
     loadJSONData();
@@ -564,7 +565,8 @@ function loadPointLayers() {
         icon_type,
         code_hasc,
         csv_file,
-        layer;
+        layer,
+        category;
     clearPointLayers();
     if(layer_in_focus === null || layer_in_focus === undefined) {
         return;
@@ -572,38 +574,33 @@ function loadPointLayers() {
     code_hasc = layer_in_focus.feature.properties['code_hasc'];
     csv_file = 'data/pecs/' + code_hasc + '-' + period + '.csv';
     layer = omnivore.csv(csv_file);
+
+    $('#vita').attr('onclick', "setReportParameters(" + MYAPP.indicator.year + "," + MYAPP.indicator.round + ", \'vita\');return false;") 
+    $('#deworming').attr('onclick', "setReportParameters(" + MYAPP.indicator.year + "," + MYAPP.indicator.round + ", \'deworming\');return false;")
+
     if(layer) {
         layer.options.pointToLayer = function(feature, latlng) {
-            var color = "#fb8072";
-            if(feature.properties['vita'] === "0") {
-                // color to indicate area not covered
-                color = "#fb8072";
-            } else if (feature.properties['vita'] === "88") {
-                // color green indicate area covered
-                color = "#AAAAAA";
-            } else {
-                color = "#2ECC40";
+            category = feature.properties['vita']
+            if (MYAPP._category !== undefined) {
+                category = feature.properties[MYAPP._category]
             }
+            var color = "green";
+            if(category === "0") {
+                // color to indicate area not covered
+                color = "red"
+            } else if (category === "88") {
+                // color cadetblue indicate area not covered
+                color = "cadetblue";
+            } 
+            icon = (feature.properties['gender'] == '1') ? 'male' : 'female'
+            var pointIcon = L.AwesomeMarkers.icon({
+                prefix: 'fa',
+                icon: icon,
+                markerColor: color,
+                iconColor: 'black'
+              });
 
-            if (feature.properties['gender'] == '1') {
-                icon_type = 'm'
-            } else {
-                icon_type = 'f';
-            };
-
-            //icon = L.MakiMarkers.icon({icon: icon_type, color: color, size: "s"});
-            //circlemarker = L.circleMarker({style: circleStyle});
-            //return L.marker(latlng, {circlemarker: style});
-            return L.circleMarker(latlng, {
-              color: '#fff',
-              border: 8,
-              fillColor: color,
-              fillOpacity: 1,
-              radius: 8,
-              opacity: 0.5}
-              );
-
-            //return L.marker(latlng, {icon: icon});
+            return L.marker(latlng, {icon: pointIcon}).addTo(map);
         };
         layer.addTo(map)
         pointLayers.push(layer);
@@ -700,7 +697,24 @@ function buildPicker() {
     picker.addTo(map);
 };
 
+function buildSelector() {
+
+    var selector = L.control({position: 'topleft'});
+
+    selector.onAdd = function (map) {
+        var div = L.DomUtil.create('div', 'info legend'),
+            labels = [];
+            labels.push('<a href="#" id="vita">Vitamin A</a>');
+            labels.push('<a href="#" id="deworming">Deworming</a>');
+        div.innerHTML = labels.join('<br>');
+        return div;
+    };
+
+    selector.addTo(map);
+};
+
 //map.on("zoomend", function (e) { console.log("ZOOMEND", map.getZoom()); });
 
 buildLegend();
+buildSelector();
 //buildPicker();
