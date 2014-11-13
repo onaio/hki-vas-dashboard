@@ -140,6 +140,11 @@ input.error{
 	padding:0 1.3em;
 }
 
+.info.legend.leaflet-control {
+    background: transparent!important;
+    box-shadow: none!important;
+}
+
 /*about*/
 #about{
     background: url(../img/hki-pecs.jpg) no-repeat top center #DFDFDF;
