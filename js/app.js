@@ -126,6 +126,14 @@ MYAPP.countryjson = null;
 
 
 function setReportParameters(year,round, category) {
+    var category_button = $("#category-button")
+    if (category === undefined || category === 'vita') {
+        category_button.text("Vitamin A ")
+    } else if (category === 'deworming') {
+        category_button.text("Deworming ")
+    }
+    category_button.append("<span class='caret'></span>")
+
     MYAPP.indicator.year = year;
     MYAPP.indicator.round = round;
     MYAPP._category = category
@@ -573,10 +581,13 @@ function loadPointLayers() {
     }
     code_hasc = layer_in_focus.feature.properties['code_hasc'];
     csv_file = 'data/pecs/' + code_hasc + '-' + period + '.csv';
-    layer = omnivore.csv(csv_file);
+    layer = omnivore.csv(csv_file).on('error', function() {
+        console.log(">>>>>>>>>>>> FILE NOT FOUND")
+    });
 
-    $('#vita').attr('onclick', "setReportParameters(" + MYAPP.indicator.year + "," + MYAPP.indicator.round + ", \'vita\');return false;") 
-    $('#deworming').attr('onclick', "setReportParameters(" + MYAPP.indicator.year + "," + MYAPP.indicator.round + ", \'deworming\');return false;")
+    $.each([ 'vita', 'deworming' ], function( index, value ) {
+        $('#' + value).attr('onclick', "setReportParameters(" + MYAPP.indicator.year + "," + MYAPP.indicator.round + ", \'" + value + "\');return false;") 
+    });
 
     if(layer) {
         layer.options.pointToLayer = function(feature, latlng) {
@@ -586,10 +597,9 @@ function loadPointLayers() {
             }
             var color = "green";
             if(category === "0") {
-                // color to indicate area not covered
                 color = "red"
             } else if (category === "88") {
-                // color cadetblue indicate area not covered
+                // color cadetblue indicates area not covered
                 color = "cadetblue";
             } 
             icon = (feature.properties['gender'] == '1') ? 'male' : 'female'
@@ -599,7 +609,6 @@ function loadPointLayers() {
                 markerColor: color,
                 iconColor: 'black'
               });
-
             return L.marker(latlng, {icon: pointIcon}).addTo(map);
         };
         layer.addTo(map)
@@ -703,10 +712,18 @@ function buildSelector() {
 
     selector.onAdd = function (map) {
         var div = L.DomUtil.create('div', 'info legend'),
-            labels = [];
-            labels.push('<a href="#" id="vita">Vitamin A</a>');
-            labels.push('<a href="#" id="deworming">Deworming</a>');
-        div.innerHTML = labels.join('<br>');
+            dropdown = "<div class='btn-group'>"+
+              "<button type='button' class='btn btn-default dropdown-toggle' data-toggle='dropdown' aria-expanded='false' id='category-button'>" +
+                "Vitamin A <span class='caret'></span>" +
+              "</button>" +
+              "<ul class='dropdown-menu' role='menu'>" +
+                "<li><a id='vita'>Vitamin A</a></li>" +
+                "<li class='divider'></li>" +
+                "<li><a id='deworming'>Deworming</a></li>" +
+              "</ul>" +
+            "</div>";
+
+        div.innerHTML = dropdown;
         return div;
     };
 
